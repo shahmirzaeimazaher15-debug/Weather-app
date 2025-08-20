@@ -1,0 +1,85 @@
+html
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>آب و هوا</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #e6f7ff;
+            color: #333;
+            text-align: center;
+            padding: 20px;
+        }
+        h1 {
+            color: #007bff;
+        }
+        #weather {
+            margin-top: 20px;
+            padding: 10px;
+            border: 2px solid #007bff;
+            border-radius: 10px;
+            background-color: #ffffff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        #date-time {
+            margin-bottom: 20px;
+            font-size: 1.1em;
+            color: #666;
+        }
+        footer {
+            margin-top: 20px;
+            font-size: 0.9em;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <h1>پیش‌بینی وضعیت آب و هوا</h1>
+    <div id="date-time"></div>
+    <input type="text" id="city" placeholder="نام شهر را وارد کنید">
+    <button onclick="getWeather()">دریافت آب و هوا</button>
+
+    <div id="weather"></div>
+
+    <footer>
+        ساخته شده توسط ابوالفضل شاهمیرزایی | <a href="https://openweathermap.org/">OpenWeatherMap</a>
+    </footer>
+
+    <script>
+        async function getWeather() {
+            const city = document.getElementById('city').value;
+            const apiKey = '9f9552013d5bf1dd1dc67e74c08d4ca2'; // کلید API
+            const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric〈=fa`;
+
+            try {
+                const response = await fetch(url);
+                if (!response.ok) {
+                    throw new Error('شهر پیدا نشد');
+                }
+                const data = await response.json();
+                const weatherInfo = `
+                    <h2>${data.name}</h2>
+                    <p>دمای کنونی: ${data.main.temp} °C</p>
+                    <p>وضعیت: ${data.weather[0].description}</p>
+                `;
+                document.getElementById('weather').innerHTML = weatherInfo;
+            } catch (error) {
+                document.getElementById('weather').innerHTML = `<p>${error.message}</p>`;
+            }
+        }
+
+        function updateDateTime() {
+            const now = new Date();
+            const options = { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false };
+            const dateTimeString = now.toLocaleDateString('fa-IR', options).replace('،', ' ');
+            document.getElementById('date-time').innerText = `تاریخ و ساعت: ${dateTimeString}`;
+        }
+
+        // زمان و تاریخ را هر بار که صفحه باز می‌شود بروزرسانی کن
+        updateDateTime();
+    </script>
+</body>
+</html>
