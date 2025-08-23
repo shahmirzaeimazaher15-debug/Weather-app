@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>اپلیکیشن هواشناسی ایران</title>
+<title>اپلیکیشن هواشناسی استان ها و شهرهای مهم ایران</title>
 <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gradient-to-br from-blue-200 to-blue-500 min-h-screen flex flex-col items-center p-6">
@@ -35,9 +35,8 @@
 </div>
 </div>
 
-<footer class="mt-8 text-white font- 
- ساخته شده توسط ابوالفضل شاهمیرزایی سال ۱۴۰۴ 
-  این سایت آب و هوا شناسی شامل استان ها و شهرهای مهم ایران است
+<footer class="mt-8 text-white font-semibold">
+  ساخته شده توسط ابوالفضل شاهمیرزایی - سال ۱۴۰۴
 </footer>
 
 <script>
@@ -97,7 +96,7 @@ for(const province in iranProvinces){
 }
 
 // ------------------ API OpenWeatherMap ------------------
-const apiKey = "271b621b86d950260e769f30b1e2e86a" ; // جایگزین کنید
+const apiKey =  "91b72ceea5b33fbdda22d69d83270035"; 
 
 async function getWeather(){
   const city = select.value;
@@ -158,4 +157,3 @@ loadComments();
 
 </body>
 </html>
-
