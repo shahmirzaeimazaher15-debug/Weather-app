@@ -73,7 +73,7 @@
 </div>
 
 <footer class="mt-10 text-white font-semibold text-center drop-shadow-lg">
-    <p>&copy; طراحی: ۱۴۰۴ ابوالفضل شاهمیرزایی</p>
+    <p>&copy; طراحی شده توسط: ابوالفضل شاهمیرزایی سال ۱۴۰۴</p>
     <p class="text-sm">این سایت از API OpenWeatherMap استفاده می‌کند❤️</p>
 </footer>
 
@@ -124,6 +124,12 @@ const select = document.getElementById("citySelect");
 for(const province in iranProvinces){
     const optgroup = document.createElement("optgroup");
     optgroup.label = province;
+    // اضافه کردن خود استان به عنوان یک گزینه
+    const provinceOption = document.createElement("option");
+    provinceOption.value = province;
+    provinceOption.textContent = province;
+    optgroup.appendChild(provinceOption);
+    
     iranProvinces[province].forEach(city=>{
         const option = document.createElement("option");
         option.value = city;
