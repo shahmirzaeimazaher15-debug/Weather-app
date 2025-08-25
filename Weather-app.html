@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>اپلیکیشن هواشناسی تمام استان ها و شهرهای مهم ایران</title>
+<title>اپلیکیشن هواشناسی استان‌ها و شهرهای مهم ایران</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;700&display=swap" rel="stylesheet">
 <style>
-    body { 
+    body {
         font-family: 'Vazirmatn', sans-serif;
         background: linear-gradient(-45deg, #a7c1eb, #98b0d4, #879abf, #7586a8);
         background-size: 400% 400%;
@@ -117,7 +117,7 @@
         top: 0;
         z-index: 10;
     }
-    
+
     /* Weather Background Colors based on weather condition */
     .weather-clear { background: linear-gradient(120deg, #fceb9b 0%, #ffdf6b 100%); }
     .weather-clouds { background: linear-gradient(120deg, #e0f2fe 0%, #9bc3e2 100%); }
@@ -130,16 +130,16 @@
 </head>
 <body class="bg-gradient-to-br from-blue-300 to-blue-600 min-h-screen flex flex-col items-center p-6">
 
-<h1 class="text-4xl font-bold text-white mb-2 drop-shadow-lg text-center">اپلیکیشن هواشناسی شهرهای ایران</h1>
+<h1 class="text-4xl font-bold text-white mb-2 drop-shadow-lg text-center">اپلیکیشن هواشناسی تمام استان ها و شهرهای مهم ایران</h1>
 <p id="datetime" class="text-gray-200 mb-8 text-lg text-center"></p>
 
 <div class="bg-white rounded-3xl shadow-xl p-8 w-full max-w-6xl border-t-4 border-blue-400">
     <div class="flex flex-col md:flex-row justify-between items-center mb-6">
-        <label class="block mb-3 md:mb-0 font-bold text-lg text-gray-700">شهر مورد نظر خود را انتخاب کنید:</label>
-        
+        <label class="block mb-3 md:mb-0 font-bold text-lg text-gray-700">شهر یا استان مورد نظر خود را انتخاب کنید:</label>
+
         <div class="custom-select-wrapper w-full md:w-auto">
             <div id="selectTrigger" class="custom-select-trigger" tabindex="0">
-                <span id="selectedOptionText" class="text-gray-500">-- انتخاب شهر --</span>
+                <span id="selectedOptionText" class="text-gray-500">-- انتخاب شهر/استان --</span>
                 <i class="fas fa-chevron-down text-gray-400 text-sm mr-2"></i>
             </div>
             <div id="optionsContainer" class="custom-options-container">
@@ -499,6 +499,41 @@ const cityNamesEn = {
     "خاتم": "Khatam"
 };
 
+// Dictionary to map province names to their capital cities in English
+const provinceCentersEn = {
+    "آذربایجان شرقی": "Tabriz",
+    "آذربایجان غربی": "Urmia",
+    "اردبیل": "Ardabil",
+    "اصفهان": "Isfahan",
+    "البرز": "Karaj",
+    "ایلام": "Ilam",
+    "بوشهر": "Bushehr",
+    "تهران": "Tehran",
+    "چهارمحال و بختیاری": "Shahrekord",
+    "خراسان جنوبی": "Birjand",
+    "خراسان رضوی": "Mashhad",
+    "خراسان شمالی": "Bojnord",
+    "خوزستان": "Ahvaz",
+    "زنجان": "Zanjan",
+    "سمنان": "Semnan",
+    "سیستان و بلوچستان": "Zahedan",
+    "فارس": "Shiraz",
+    "قزوین": "Qazvin",
+    "قم": "Qom",
+    "کردستان": "Sanandaj",
+    "کرمان": "Kerman",
+    "کرمانشاه": "Kermanshah",
+    "کهگیلویه و بویراحمد": "Yasuj",
+    "گلستان": "Gorgan",
+    "گیلان": "Rasht",
+    "لرستان": "Khorramabad",
+    "مازندران": "Sari",
+    "مرکزی": "Arak",
+    "هرمزگان": "Bandar Abbas",
+    "همدان": "Hamadan",
+    "یزد": "Yazd"
+};
+
 // ------------------ مدیریت دراپ‌داون کاستوم ------------------
 const selectWrapper = document.querySelector('.custom-select-wrapper');
 const selectTrigger = document.getElementById('selectTrigger');
@@ -515,7 +550,16 @@ function populateSelect() {
         optgroupLabel.className = "optgroup-label";
         optgroupLabel.textContent = province;
         optionsList.appendChild(optgroupLabel);
-        
+        // Add province itself as a selectable option
+        const provinceOption = document.createElement("div");
+        provinceOption.className = "custom-option";
+        provinceOption.textContent = province;
+        provinceOption.setAttribute('data-value', province);
+        provinceOption.addEventListener('click', () => {
+            selectOption(province);
+        });
+        optionsList.appendChild(provinceOption);
+
         iranProvinces[province].forEach(city => {
             const optionDiv = document.createElement("div");
             optionDiv.className = "custom-option";
@@ -547,7 +591,7 @@ function searchSelect() {
     const filter = searchInput.value.toLowerCase();
     const options = optionsList.querySelectorAll('.custom-option');
     const labels = optionsList.querySelectorAll('.optgroup-label');
-    
+
     options.forEach(option => {
         const text = option.textContent.toLowerCase();
         if (text.includes(filter)) {
@@ -594,12 +638,19 @@ document.addEventListener('DOMContentLoaded', populateSelect);
 
 // ------------------ API OpenWeatherMap ------------------
 const apiKey = "159f0bcf09926a5148eb6881523f6f08";
+const proxyUrl = 'https://corsproxy.io/?';
 
 async function getWeather(){
-    const cityFa = document.getElementById("citySelect").value;
-    if(!cityFa) { alert("لطفا یک شهر را انتخاب کنید."); return; }
-    
-    const cityEn = cityNamesEn[cityFa] || cityFa;
+    const selectedFaName = document.getElementById("citySelect").value;
+    if(!selectedFaName) { alert("لطفا یک شهر یا استان را انتخاب کنید."); return; }
+
+    let cityEn;
+    // Check if the selected item is a province or a city
+    if (provinceCentersEn[selectedFaName]) {
+        cityEn = provinceCentersEn[selectedFaName];
+    } else {
+        cityEn = cityNamesEn[selectedFaName] || selectedFaName;
+    }
 
     const weatherResultDiv = document.getElementById("weatherResult");
     const currentWeatherDiv = document.getElementById("currentWeather");
@@ -610,9 +661,12 @@ async function getWeather(){
     weatherResultDiv.classList.remove('hidden', 'opacity-0');
 
     try {
+        const weatherApiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${cityEn},IR&appid=${apiKey}&units=metric&lang=fa`;
+        const forecastApiUrl = `https://api.openweathermap.org/data/2.5/forecast?q=${cityEn},IR&appid=${apiKey}&units=metric&lang=fa`;
+
         const [weatherRes, forecastRes] = await Promise.all([
-            fetch(`https://api.openweathermap.org/data/2.5/weather?q=${cityEn},IR&appid=${apiKey}&units=metric&lang=fa`),
-            fetch(`https://api.openweathermap.org/data/2.5/forecast?q=${cityEn},IR&appid=${apiKey}&units=metric&lang=fa`)
+            fetch(proxyUrl + weatherApiUrl),
+            fetch(proxyUrl + forecastApiUrl)
         ]);
 
         if (!weatherRes.ok || !forecastRes.ok) {
@@ -622,7 +676,7 @@ async function getWeather(){
 
         const weatherData = await weatherRes.json();
         const forecastData = await forecastRes.json();
-        
+
         // Dynamically change weather card background based on weather main condition
         const weatherMain = weatherData.weather[0].main.toLowerCase();
         const weatherClasses = {
@@ -687,7 +741,7 @@ async function getWeather(){
                 </div>`;
         }).join("");
     } catch (err) {
-        currentWeatherDiv.innerHTML = `<div class="text-center w-full text-red-500"><i class="fas fa-exclamation-triangle text-3xl mb-2"></i><p>خطا: ${err.message}</p><p>لطفا نام شهر را به درستی وارد کنید.</p></div>`;
+        currentWeatherDiv.innerHTML = `<div class="text-center w-full text-red-500"><i class="fas fa-exclamation-triangle text-3xl mb-2"></i><p>خطا: ${err.message}</p><p>لطفا نام شهر یا استان را به درستی وارد کنید.</p></div>`;
         forecastDiv.innerHTML = '';
         console.error(err);
     }
