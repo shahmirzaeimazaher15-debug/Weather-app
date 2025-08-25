@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>اپلیکیشن هواشناسی استان‌ها و شهرهای مهم ایران</title>
+<title>اپلیکیشن هواشناسی استان‌ها و شهرهای ایران</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;700&display=swap" rel="stylesheet">
@@ -176,7 +176,7 @@
 
 <footer class="mt-10 text-white font-semibold text-center drop-shadow-lg">
     <p>&copy; طراحی: ابوالفضل شاهمیرزایی سال ۱۴۰۴</p>
-    <p class="text-sm">این سایت از API OpenWeatherMap استفاده می‌کند ❤️</p>
+    <p class="text-sm">این سایت از API WeatherAPI.com استفاده می‌کند ❤️</p>
 </footer>
 
 <script>
@@ -499,7 +499,6 @@ const cityNamesEn = {
     "خاتم": "Khatam"
 };
 
-// Dictionary to map province names to their capital cities in English
 const provinceCentersEn = {
     "آذربایجان شرقی": "Tabriz",
     "آذربایجان غربی": "Urmia",
@@ -636,9 +635,8 @@ document.addEventListener('click', (e) => {
 
 document.addEventListener('DOMContentLoaded', populateSelect);
 
-// ------------------ API OpenWeatherMap ------------------
-const apiKey = "159f0bcf09926a5148eb6881523f6f08";
-const proxyUrl = 'https://corsproxy.io/?';
+// ------------------ API WeatherAPI.com ------------------
+const apiKey = "05457cd98e894fe2b65145647252508"; // کلید API خود را اینجا قرار دهید
 
 async function getWeather(){
     const selectedFaName = document.getElementById("citySelect").value;
@@ -661,96 +659,99 @@ async function getWeather(){
     weatherResultDiv.classList.remove('hidden', 'opacity-0');
 
     try {
-        const weatherApiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${cityEn},IR&appid=${apiKey}&units=metric&lang=fa`;
-        const forecastApiUrl = `https://api.openweathermap.org/data/2.5/forecast?q=${cityEn},IR&appid=${apiKey}&units=metric&lang=fa`;
+        const weatherApiUrl = `https://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${cityEn}&lang=fa`;
+        const forecastApiUrl = `https://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=${cityEn}&days=5&lang=fa`;
 
         const [weatherRes, forecastRes] = await Promise.all([
-            fetch(proxyUrl + weatherApiUrl),
-            fetch(proxyUrl + forecastApiUrl)
+            fetch(weatherApiUrl),
+            fetch(forecastApiUrl)
         ]);
 
         if (!weatherRes.ok || !forecastRes.ok) {
             const errorData = await weatherRes.json();
-            throw new Error(`خطا در دریافت اطلاعات: ${errorData.message}`);
+            throw new Error(`خطا در دریافت اطلاعات: ${errorData.error.message}`);
         }
 
         const weatherData = await weatherRes.json();
         const forecastData = await forecastRes.json();
 
-        // Dynamically change weather card background based on weather main condition
-        const weatherMain = weatherData.weather[0].main.toLowerCase();
+        const weatherMain = weatherData.current.condition.text;
         const weatherClasses = {
-            'clear': 'weather-clear',
-            'clouds': 'weather-clouds',
-            'rain': 'weather-rain',
-            'drizzle': 'weather-drizzle',
-            'thunderstorm': 'weather-thunderstorm',
-            'snow': 'weather-snow',
-            'mist': 'weather-mist',
-            'smoke': 'weather-mist',
-            'haze': 'weather-mist',
-            'fog': 'weather-mist',
+            'آفتابی': 'weather-clear',
+            'نیمه ابری': 'weather-clouds',
+            'ابری': 'weather-clouds',
+            'بارانی': 'weather-rain',
+            'باران': 'weather-rain',
+            'نم‌نم باران': 'weather-drizzle',
+            'رگبار': 'weather-drizzle',
+            'رعد و برق': 'weather-thunderstorm',
+            'برفی': 'weather-snow',
+            'برف': 'weather-snow',
+            'مه‌آلود': 'weather-mist',
+            'مه': 'weather-mist',
+            'یخبندان': 'weather-snow',
+            // Add more Farsi mappings as needed
         };
         currentWeatherDiv.className = `weather-card p-6 rounded-xl shadow-inner mb-6 flex flex-col sm:flex-row justify-around items-center space-y-4 sm:space-y-0 text-center ${weatherClasses[weatherMain] || ''}`;
 
-        const weatherIconHtml = getWeatherIconHtml(weatherData.weather[0].icon);
+        const weatherIconHtml = getWeatherIconHtml(weatherData.current.condition.icon);
 
         currentWeatherDiv.innerHTML = `
             <div class="flex flex-col items-center">
                 ${weatherIconHtml}
                 <div class="mt-2 text-center">
-                    <p class="text-3xl font-bold">${weatherData.main.temp.toFixed(1)}°C</p>
+                    <p class="text-3xl font-bold">${weatherData.current.temp_c.toFixed(1)}°C</p>
                     <p class="text-sm text-gray-600">دما</p>
                 </div>
             </div>
             <div class="flex flex-col items-center">
                 <i class="fas fa-smog text-4xl text-gray-500"></i>
                 <div class="mt-2 text-center">
-                    <p class="text-xl font-semibold capitalize">${weatherData.weather[0].description}</p>
+                    <p class="text-xl font-semibold capitalize">${weatherData.current.condition.text}</p>
                     <p class="text-sm text-gray-600">وضعیت</p>
                 </div>
             </div>
             <div class="flex flex-col items-center">
                 <i class="fas fa-tint text-4xl text-blue-400"></i>
                 <div class="mt-2 text-center">
-                    <p class="text-3xl font-bold">${weatherData.main.humidity}%</p>
+                    <p class="text-3xl font-bold">${weatherData.current.humidity}%</p>
                     <p class="text-sm text-gray-600">رطوبت</p>
                 </div>
             </div>
             <div class="flex flex-col items-center">
                 <i class="fas fa-wind text-4xl text-gray-400"></i>
                 <div class="mt-2 text-center">
-                    <p class="text-3xl font-bold">${weatherData.wind.speed.toFixed(1)} m/s</p>
+                    <p class="text-3xl font-bold">${weatherData.current.wind_kph.toFixed(1)} km/h</p>
                     <p class="text-sm text-gray-600">سرعت باد</p>
                 </div>
             </div>`;
 
-        const dailyForecast = forecastData.list.filter((_, i) => i % 8 === 0).slice(0, 5);
+        const dailyForecast = forecastData.forecast.forecastday.slice(0, 5);
         forecastDiv.innerHTML = dailyForecast.map(day => {
-            const date = new Date(day.dt * 1000);
+            const date = new Date(day.date);
             const dayName = date.toLocaleDateString('fa-IR', { weekday: 'short' });
             const formattedDate = date.toLocaleDateString('fa-IR', { day: 'numeric', month: 'numeric' });
-            const iconUrl = `https://openweathermap.org/img/wn/${day.weather[0].icon}@2x.png`;
+            const iconUrl = day.day.condition.icon;
             return `
                 <div class="forecast-card shadow rounded-xl p-4 text-center flex flex-col items-center">
                     <p class="font-bold text-sm text-gray-700">${dayName}</p>
                     <p class="text-xs text-gray-500">${formattedDate}</p>
                     <img src="${iconUrl}" class="w-16 h-16 mt-2">
-                    <p class="text-lg font-semibold my-2 text-blue-800">${day.main.temp.toFixed(1)}°C</p>
-                    <p class="text-xs capitalize text-gray-600">${day.weather[0].description}</p>
+                    <p class="text-lg font-semibold my-2 text-blue-800">${day.day.avgtemp_c.toFixed(1)}°C</p>
+                    <p class="text-xs capitalize text-gray-600">${day.day.condition.text}</p>
                 </div>`;
         }).join("");
     } catch (err) {
-        currentWeatherDiv.innerHTML = `<div class="text-center w-full text-red-500"><i class="fas fa-exclamation-triangle text-3xl mb-2"></i><p>خطا: ${err.message}</p><p>لطفا نام شهر یا استان را به درستی وارد کنید.</p></div>`;
+        currentWeatherDiv.innerHTML = `<div class="text-center w-full text-red-500"><i class="fas fa-exclamation-triangle text-3xl mb-2"></i><p>خطا در دریافت اطلاعات: ${err.message}</p><p>لطفا از صحت نام شهر و کلید API خود اطمینان حاصل کنید.</p></div>`;
         forecastDiv.innerHTML = '';
         console.error(err);
     }
 }
 
-// Function to provide animated weather icons
-function getWeatherIconHtml(iconCode) {
-    const iconBaseUrl = 'https://openweathermap.org/img/wn/';
-    return `<img src="${iconBaseUrl}${iconCode}@4x.png" alt="Weather icon" class="w-24 h-24 -mt-4">`;
+// Function to provide weather icons
+function getWeatherIconHtml(iconUrl) {
+    // WeatherAPI provides full URLs, so we just use it directly
+    return `<img src="${iconUrl}" alt="Weather icon" class="w-24 h-24 -mt-4">`;
 }
 
 // ------------------ کامنت‌ها ------------------
