@@ -8,189 +8,238 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;700&display=swap" rel="stylesheet">
 <style>
-  body { font-family: 'Vazirmatn', sans-serif; }
-  .weather-card { background: linear-gradient(120deg, #e0f2fe 0%, #bae6fd 100%); }
-  .forecast-card { background: linear-gradient(120deg, #f0f9ff 0%, #e0f2fe 100%); }
-  .comment-item { background-color: #f9fafb; border-left: 4px solid #2563eb; }
+    body { font-family: 'Vazirmatn', sans-serif; }
+    .weather-card {
+        background: linear-gradient(120deg, #e0f2fe 0%, #bae6fd 100%);
+        animation: fadeIn 0.8s ease-in-out;
+    }
+    .forecast-card {
+        background: linear-gradient(120deg, #f0f9ff 0%, #e0f2fe 100%);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .forecast-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    }
+    .comment-item {
+        background-color: #f9fafb;
+        border-right: 4px solid #2563eb;
+        transition: all 0.3s ease;
+    }
+    .comment-item:hover {
+        background-color: #e2e8f0;
+    }
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
 </style>
 </head>
 <body class="bg-gradient-to-br from-blue-200 to-blue-500 min-h-screen flex flex-col items-center p-6">
 
-<h1 class="text-4xl font-bold text-white mb-2 drop-shadow-lg">اپلیکیشن هواشناسی شهرهای ایران</h1>
-<p id="datetime" class="text-gray-200 mb-8 text-lg"></p>
+<h1 class="text-4xl font-bold text-white mb-2 drop-shadow-lg text-center">اپلیکیشن هواشناسی شهرهای ایران</h1>
+<p id="datetime" class="text-gray-200 mb-8 text-lg text-center"></p>
 
 <div class="bg-white rounded-3xl shadow-xl p-8 w-full max-w-5xl border-t-4 border-blue-400">
-  <div class="flex flex-col md:flex-row justify-between items-center mb-6">
-    <label class="block mb-3 md:mb-0 font-bold text-lg text-gray-700">شهر مورد نظر خود را انتخاب کنید:</label>
-    <select id="citySelect" class="p-3 border border-gray-300 rounded-lg w-full md:w-auto focus:ring-blue-500 focus:border-blue-500">
-      <option value="">-- انتخاب شهر --</option>
-    </select>
-  </div>
-
-  <button onclick="getWeather()" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 px-6 rounded-lg shadow-md font-semibold transition duration-300 ease-in-out flex items-center justify-center mb-6">
-    <i class="fas fa-cloud-sun ml-2"></i> نمایش آب‌وهوا
-  </button>
-
-  <div id="weatherResult" class="mt-8 hidden transition-opacity duration-500 ease-in-out">
-    <h2 class="text-2xl font-bold text-gray-800 mb-4 border-b-2 pb-2">وضعیت فعلی</h2>
-    <div id="currentWeather" class="weather-card p-6 rounded-xl shadow-inner mb-6 flex flex-col sm:flex-row justify-around items-center space-y-4 sm:space-y-0"></div>
-
-    <h2 class="text-2xl font-bold text-gray-800 mb-4 border-b-2 pb-2">پیش‌بینی ۵ روز آینده</h2>
-    <div id="forecast" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4"></div>
-  </div>
-
-  <div class="mt-10 pt-6 border-t border-gray-200">
-    <h2 class="text-2xl font-bold text-gray-800 mb-4">نظرات کاربران</h2>
-    <div class="flex mb-4">
-      <input id="commentInput" type="text" placeholder="نظر خود را وارد کنید..." class="flex-grow p-3 border border-gray-300 rounded-l-lg focus:ring-blue-500 focus:border-blue-500">
-      <button onclick="addComment()" class="bg-green-500 hover:bg-green-600 text-white px-5 py-3 rounded-r-lg font-semibold transition duration-300 ease-in-out flex items-center">
-        <i class="fas fa-paper-plane ml-2"></i> ارسال
-      </button>
+    <div class="flex flex-col md:flex-row justify-between items-center mb-6">
+        <label class="block mb-3 md:mb-0 font-bold text-lg text-gray-700">شهر مورد نظر خود را انتخاب کنید:</label>
+        <select id="citySelect" class="p-3 border border-gray-300 rounded-lg w-full md:w-auto focus:ring-blue-500 focus:border-blue-500">
+            <option value="">-- انتخاب شهر --</option>
+        </select>
     </div>
-    <div id="commentsList" class="mt-4 space-y-3 max-h-64 overflow-y-auto pr-2"></div>
-  </div>
+
+    <button onclick="getWeather()" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 px-6 rounded-lg shadow-md font-semibold transition duration-300 ease-in-out flex items-center justify-center mb-6">
+        <i class="fas fa-cloud-sun ml-2"></i> نمایش آب‌وهوا
+    </button>
+
+    <div id="weatherResult" class="mt-8 hidden opacity-0 transition-opacity duration-500 ease-in-out">
+        <h2 class="text-2xl font-bold text-gray-800 mb-4 border-b-2 pb-2">وضعیت فعلی</h2>
+        <div id="currentWeather" class="weather-card p-6 rounded-xl shadow-inner mb-6 flex flex-col sm:flex-row justify-around items-center space-y-4 sm:space-y-0 text-center"></div>
+
+        <h2 class="text-2xl font-bold text-gray-800 mb-4 border-b-2 pb-2">پیش‌بینی ۵ روز آینده</h2>
+        <div id="forecast" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4"></div>
+    </div>
+
+    <div class="mt-10 pt-6 border-t border-gray-200">
+        <h2 class="text-2xl font-bold text-gray-800 mb-4">نظرات کاربران</h2>
+        <div class="flex mb-4">
+            <input id="commentInput" type="text" placeholder="نظر خود را وارد کنید..." class="flex-grow p-3 border border-gray-300 rounded-r-lg focus:ring-blue-500 focus:border-blue-500">
+            <button onclick="addComment()" class="bg-green-500 hover:bg-green-600 text-white px-5 py-3 rounded-l-lg font-semibold transition duration-300 ease-in-out flex items-center">
+                <i class="fas fa-paper-plane ml-2"></i> ارسال
+            </button>
+        </div>
+        <div id="commentsList" class="mt-4 space-y-3 max-h-64 overflow-y-auto pl-2"></div>
+    </div>
 </div>
 
-<footer class="mt-10 text-white font-semibold text-center">
-  <p>&copy; 
-     طراحی:۱۴۰۴ابوالفضل شاهمیرزایی سال
-    این سایت از API openweathermap استفاده می کند❤️</p>
+<footer class="mt-10 text-white font-semibold text-center drop-shadow-lg">
+    <p>&copy; طراحی: ۱۴۰۴ ابوالفضل شاهمیرزایی</p>
+    <p class="text-sm">این سایت از API OpenWeatherMap استفاده می‌کند❤️</p>
 </footer>
 
 <script>
 // ------------------ تاریخ و ساعت ------------------
 setInterval(() => {
-  const now = new Date();
-  document.getElementById("datetime").innerText =
-    now.toLocaleString('fa-IR', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',
-                                   hour: '2-digit', minute: '2-digit', second: '2-digit' });
+    const now = new Date();
+    document.getElementById("datetime").innerText =
+        now.toLocaleString('fa-IR', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',
+                                     hour: '2-digit', minute: '2-digit', second: '2-digit' });
 }, 1000);
 
 // ------------------ استان‌ها و شهرهای مهم ------------------
 const iranProvinces = {
-  "آذربایجان شرقی":["تبریز","مراغه","مرند","بناب","میانه","اهر","سراب"],
-  "آذربایجان غربی":["ارومیه","خوی","مهاباد","بوکان","پیرانشهر","میاندوآب","سردشت"],
-  "اردبیل":["اردبیل","پارس‌آباد","خلخال","مشگین‌شهر","نمین","بیله‌سوار"],
-  "اصفهان":["اصفهان","کاشان","نجف‌آباد","شهرضا","مبارکه","گلپایگان","نطنز"],
-  "البرز":["کرج","طالقان","نظرآباد","هشتگرد","اشتهارد","فردیس","ماهدشت"],
-  "ایلام":["ایلام","دهلران","مهران","آبدانان","ایوان","دره‌شهر","سرابله"],
-  "بوشهر":["بوشهر","برازجان","کنگان","جم","گناوه","دشتی","دیر"],
-  "تهران":["تهران","شهریار","اسلام‌شهر","ملارد","پاکدشت","ورامین","دماوند"],
-  "چهارمحال و بختیاری":["شهرکرد","بروجن","لردگان","فرخشهر","سامان","هفشجان","کیار"],
-  "خراسان جنوبی":["بیرجند","قائن","فردوس","سرایان","طبس","نهبندان","بشرویه"],
-  "خراسان رضوی":["مشهد","نیشابور","سبزوار","تربت‌حیدریه","بردسکن","فریمان","گناباد"],
-  "خراسان شمالی":["بجنورد","شیروان","اسفراین","جاجرم","مانه","فاروج","راز"],
-  "خوزستان":["اهواز","دزفول","آبادان","اندیمشک","خرمشهر","ماهشهر","بهبهان"],
-  "زنجان":["زنجان","ابهر","خرمدره","قیدار","هیدج","سلطانیه","زرین‌رود"],
-  "سمنان":["سمنان","شاهرود","دامغان","گرمسار","مهدی‌شهر","آرادان","سرخه"],
-  "سیستان و بلوچستان":["زاهدان","زابل","ایرانشهر","چابهار","خاش","سراوان","نیک‌شهر"],
-  "فارس":["شیراز","مرودشت","جهرم","فسا","لار","کازرون","داراب"],
-  "قزوین":["قزوین","تاکستان","الوند","محمدیه","آبیک","بویین‌زهرا","اقبالیه"],
-  "قم":["قم","جعفریه","کهک","سلفچگان","دستجرد","قنوات","کوشک نصرت"],
-  "کردستان":["سنندج","سقز","مریوان","بانه","قروه","کامیاران","دیواندره"],
-  "کرمان":["کرمان","سیرجان","رفسنجان","جیرفت","بم","زرند","کهنوج"],
-  "کرمانشاه":["کرمانشاه","اسلام‌آباد غرب","کنگاور","سنقر","هرسین","صحنه","جوانرود"],
-  "کهگیلویه و بویراحمد":["یاسوج","دهدشت","گچساران","لیکک","باشت","چرام","سی‌سخت"],
-  "گلستان":["گرگان","گنبد کاووس","علی‌آباد کتول","بندر ترکمن","آزادشهر","کردکوی","کلاله"],
-  "گیلان":["رشت","بندر انزلی","لاهیجان","لنگرود","رودسر","آستارا","صومعه‌سرا"],
-  "لرستان":["خرم‌آباد","بروجرد","دورود","کوهدشت","الشتر","نورآباد","ازنا"],
-  "مازندران":["ساری","بابل","آمل","قائم‌شهر","بهشهر","نوشهر","چالوس"],
-  "مرکزی":["اراک","ساوه","خمین","محلات","دلیجان","تفرش","آشتیان"],
-  "هرمزگان":["بندرعباس","میناب","دهبارز","قشم","کیش","بندر لنگه","حاجی‌آباد"],
-  "همدان":["همدان","ملایر","نهاوند","اسدآباد","تویسرکان","کبودرآهنگ","رزن"],
-  "یزد":["یزد","میبد","اردکان","بافق","مهریز","تفت","ابرکوه"]
+    "آذربایجان شرقی":["تبریز","مراغه","مرند","بناب","میانه","اهر","سراب","شبستر","اسکو","جلفا","هشترود"],
+    "آذربایجان غربی":["ارومیه","خوی","مهاباد","بوکان","پیرانشهر","میاندوآب","سردشت","ماکو","نقده","سلماس"],
+    "اردبیل":["اردبیل","پارس‌آباد","خلخال","مشگین‌شهر","نمین","بیله‌سوار","سرعین","نیر","کوثر"],
+    "اصفهان":["اصفهان","کاشان","نجف‌آباد","شهرضا","مبارکه","گلپایگان","نطنز","فولادشهر","شاهین‌شهر","فلاورجان"],
+    "البرز":["کرج","طالقان","نظرآباد","هشتگرد","اشتهارد","فردیس","ماهدشت","کمال‌شهر","چهارباغ"],
+    "ایلام":["ایلام","دهلران","مهران","آبدانان","ایوان","دره‌شهر","سرابله","بدره","چرداول"],
+    "بوشهر":["بوشهر","برازجان","کنگان","جم","گناوه","دشتی","دیر","عسلویه","خارک"],
+    "تهران":["تهران","شهریار","اسلام‌شهر","ملارد","پاکدشت","ورامین","دماوند","ری","شمیرانات","پردیس","رباط‌کریم"],
+    "چهارمحال و بختیاری":["شهرکرد","بروجن","لردگان","فرخشهر","سامان","هفشجان","کیار","فارسان"],
+    "خراسان جنوبی":["بیرجند","قائن","فردوس","سرایان","طبس","نهبندان","بشرویه","سربیشه"],
+    "خراسان رضوی":["مشهد","نیشابور","سبزوار","تربت‌حیدریه","بردسکن","فریمان","گناباد","قوچان","کاشمر","خواف"],
+    "خراسان شمالی":["بجنورد","شیروان","اسفراین","جاجرم","مانه","فاروج","راز","گرمه"],
+    "خوزستان":["اهواز","دزفول","آبادان","اندیمشک","خرمشهر","ماهشهر","بهبهان","مسجدسلیمان","ایذه","شوشتر"],
+    "زنجان":["زنجان","ابهر","خرمدره","قیدار","هیدج","سلطانیه","زرین‌رود","ماهنشان"],
+    "سمنان":["سمنان","شاهرود","دامغان","گرمسار","مهدی‌شهر","آرادان","سرخه","شهمیرزاد"],
+    "سیستان و بلوچستان":["زاهدان","زابل","ایرانشهر","چابهار","خاش","سراوان","نیک‌شهر","کنارک","سرباز"],
+    "فارس":["شیراز","مرودشت","جهرم","فسا","لار","کازرون","داراب","اقلید","فیروزآباد","استهبان"],
+    "قزوین":["قزوین","تاکستان","الوند","محمدیه","آبیک","بویین‌زهرا","اقبالیه","شریفیه"],
+    "قم":["قم","جعفریه","کهک","سلفچگان","دستجرد","قنوات","کوشک نصرت"],
+    "کردستان":["سنندج","سقز","مریوان","بانه","قروه","کامیاران","دیواندره","سروآباد"],
+    "کرمان":["کرمان","سیرجان","رفسنجان","جیرفت","بم","زرند","کهنوج","بافت","کوهبنان"],
+    "کرمانشاه":["کرمانشاه","اسلام‌آباد غرب","کنگاور","سنقر","هرسین","صحنه","جوانرود","قصرشیرین"],
+    "کهگیلویه و بویراحمد":["یاسوج","دهدشت","گچساران","لیکک","باشت","چرام","سی‌سخت","سوق"],
+    "گلستان":["گرگان","گنبد کاووس","علی‌آباد کتول","بندر ترکمن","آزادشهر","کردکوی","کلاله","مینودشت"],
+    "گیلان":["رشت","بندر انزلی","لاهیجان","لنگرود","رودسر","آستارا","صومعه‌سرا","فومن","سیاهکل"],
+    "لرستان":["خرم‌آباد","بروجرد","دورود","کوهدشت","الشتر","نورآباد","ازنا","پلدختر"],
+    "مازندران":["ساری","بابل","آمل","قائم‌شهر","بهشهر","نوشهر","چالوس","تنکابن","رامسر","بابلسر"],
+    "مرکزی":["اراک","ساوه","خمین","محلات","دلیجان","تفرش","آشتیان","شازند"],
+    "هرمزگان":["بندرعباس","میناب","دهبارز","قشم","کیش","بندر لنگه","حاجی‌آباد","رودان","جاسک"],
+    "همدان":["همدان","ملایر","نهاوند","اسدآباد","تویسرکان","کبودرآهنگ","رزن","بهار"],
+    "یزد":["یزد","میبد","اردکان","بافق","مهریز","تفت","ابرکوه","خاتم"]
 };
 const select = document.getElementById("citySelect");
 for(const province in iranProvinces){
-  const optgroup = document.createElement("optgroup");
-  optgroup.label = province;
-  iranProvinces[province].forEach(city=>{
-    const option = document.createElement("option");
-    option.value = city;
-    option.textContent = city;
-    optgroup.appendChild(option);
-  });
-  select.appendChild(optgroup);
+    const optgroup = document.createElement("optgroup");
+    optgroup.label = province;
+    iranProvinces[province].forEach(city=>{
+        const option = document.createElement("option");
+        option.value = city;
+        option.textContent = city;
+        optgroup.appendChild(option);
+    });
+    select.appendChild(optgroup);
 }
 
 // ------------------ API OpenWeatherMap ------------------
-const apiKey = "d1fd1eedfc76111eb8a94ac59482e1d2"; // کلید خودت
+const apiKey = "d1fd1eedfc76111eb8a94ac59482e1d2"; // کلید خود را اینجا قرار دهید
 
 async function getWeather(){
-  const city = select.value;
-  if(!city) return alert("لطفا یک شهر را از لیست انتخاب کنید.");
-  try {
-    const [weatherRes, forecastRes] = await Promise.all([
-      fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city},IR&appid=${apiKey}&units=metric&lang=fa`),
-      fetch(`https://api.openweathermap.org/data/2.5/forecast?q=${city},IR&appid=${apiKey}&units=metric&lang=fa`)
-    ]);
-    if (!weatherRes.ok || !forecastRes.ok) throw new Error("خطا در دریافت اطلاعات از API");
+    const city = select.value;
+    if(!city) {
+        alert("لطفا یک شهر را از لیست انتخاب کنید.");
+        return;
+    }
 
-    const weatherData = await weatherRes.json();
-    const forecastData = await forecastRes.json();
+    const weatherResultDiv = document.getElementById("weatherResult");
+    const currentWeatherDiv = document.getElementById("currentWeather");
+    const forecastDiv = document.getElementById("forecast");
 
-    // وضعیت فعلی
-    document.getElementById("currentWeather").innerHTML = `
-      <div class="flex items-center space-x-4">
-        <i class="fas fa-thermometer-half text-3xl text-blue-600"></i>
-        <div><p class="text-xl font-semibold">${weatherData.main.temp.toFixed(1)}°C</p><p class="text-sm text-gray-600">دما</p></div>
-      </div>
-      <div class="flex items-center space-x-4">
-        <i class="fas fa-smog text-3xl text-gray-500"></i>
-        <div><p class="text-lg font-semibold capitalize">${weatherData.weather[0].description}</p><p class="text-sm text-gray-600">وضعیت</p></div>
-      </div>
-      <div class="flex items-center space-x-4">
-        <i class="fas fa-tint text-3xl text-blue-400"></i>
-        <div><p class="text-xl font-semibold">${weatherData.main.humidity}%</p><p class="text-sm text-gray-600">رطوبت</p></div>
-      </div>`;
+    currentWeatherDiv.innerHTML = `<div class="text-center w-full"><i class="fas fa-spinner fa-spin text-4xl text-blue-500"></i><p class="mt-2 text-gray-600">در حال بارگذاری...</p></div>`;
+    forecastDiv.innerHTML = '';
+    weatherResultDiv.classList.remove('hidden');
+    weatherResultDiv.classList.remove('opacity-0');
 
-    // پیش‌بینی
-    const dailyForecast = forecastData.list.filter((_, i) => i % 8 === 0).slice(0, 5);
-    document.getElementById("forecast").innerHTML = dailyForecast.map(day => {
-      const date = new Date(day.dt * 1000);
-      const dayName = date.toLocaleDateString('fa-IR', { weekday: 'short' });
-      const formattedDate = date.toLocaleDateString('fa-IR', { day: 'numeric', month: 'numeric' });
-      return `
-        <div class="forecast-card shadow rounded-xl p-4 text-center flex flex-col items-center">
-          <p class="font-bold text-sm">${dayName} (${formattedDate})</p>
-          <p class="text-lg font-semibold my-2">${day.main.temp.toFixed(1)}°C</p>
-          <p class="text-xs capitalize">${day.weather[0].description}</p>
-          <img src="http://openweathermap.org/img/wn/${day.weather[0].icon}.png" class="w-16 h-16 mt-2">
-        </div>`;
-    }).join("");
-    document.getElementById("weatherResult").classList.remove("hidden");
-  } catch (err) {
-    alert("خطا در دریافت اطلاعات: " + err.message);
-  }
+    try {
+        const [weatherRes, forecastRes] = await Promise.all([
+            fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city},IR&appid=${apiKey}&units=metric&lang=fa`),
+            fetch(`https://api.openweathermap.org/data/2.5/forecast?q=${city},IR&appid=${apiKey}&units=metric&lang=fa`)
+        ]);
+
+        if (!weatherRes.ok || !forecastRes.ok) {
+            const errorData = await weatherRes.json();
+            throw new Error(`خطا در دریافت اطلاعات: ${errorData.message}`);
+        }
+
+        const weatherData = await weatherRes.json();
+        const forecastData = await forecastRes.json();
+
+        // وضعیت فعلی
+        currentWeatherDiv.innerHTML = `
+            <div class="flex flex-col items-center">
+                <i class="fas fa-thermometer-half text-4xl text-blue-600"></i>
+                <div class="mt-2 text-center"><p class="text-3xl font-bold">${weatherData.main.temp.toFixed(1)}°C</p><p class="text-sm text-gray-600">دما</p></div>
+            </div>
+            <div class="flex flex-col items-center">
+                <i class="fas fa-smog text-4xl text-gray-500"></i>
+                <div class="mt-2 text-center"><p class="text-xl font-semibold capitalize">${weatherData.weather[0].description}</p><p class="text-sm text-gray-600">وضعیت</p></div>
+            </div>
+            <div class="flex flex-col items-center">
+                <i class="fas fa-tint text-4xl text-blue-400"></i>
+                <div class="mt-2 text-center"><p class="text-3xl font-bold">${weatherData.main.humidity}%</p><p class="text-sm text-gray-600">رطوبت</p></div>
+            </div>
+            <div class="flex flex-col items-center">
+                <i class="fas fa-wind text-4xl text-gray-400"></i>
+                <div class="mt-2 text-center"><p class="text-3xl font-bold">${weatherData.wind.speed.toFixed(1)} m/s</p><p class="text-sm text-gray-600">سرعت باد</p></div>
+            </div>`;
+
+        // پیش‌بینی
+        const dailyForecast = forecastData.list.filter((_, i) => i % 8 === 0).slice(0, 5);
+        forecastDiv.innerHTML = dailyForecast.map(day => {
+            const date = new Date(day.dt * 1000);
+            const dayName = date.toLocaleDateString('fa-IR', { weekday: 'short' });
+            const formattedDate = date.toLocaleDateString('fa-IR', { day: 'numeric', month: 'numeric' });
+            return `
+                <div class="forecast-card shadow rounded-xl p-4 text-center flex flex-col items-center">
+                    <p class="font-bold text-sm text-gray-700">${dayName}</p>
+                    <p class="text-xs text-gray-500">${formattedDate}</p>
+                    <img src="https://openweathermap.org/img/wn/${day.weather[0].icon}.png" class="w-16 h-16 mt-2">
+                    <p class="text-lg font-semibold my-2 text-blue-800">${day.main.temp.toFixed(1)}°C</p>
+                    <p class="text-xs capitalize text-gray-600">${day.weather[0].description}</p>
+                </div>`;
+        }).join("");
+    } catch (err) {
+        currentWeatherDiv.innerHTML = `<div class="text-center w-full text-red-500"><i class="fas fa-exclamation-triangle text-3xl mb-2"></i><p>خطا: ${err.message}</p><p>لطفا نام شهر را به درستی وارد کنید.</p></div>`;
+        forecastDiv.innerHTML = '';
+        console.error(err);
+    }
 }
 
 // ------------------ کامنت‌ها ------------------
 function loadComments(){
-  const comments = JSON.parse(localStorage.getItem("comments")||"[]");
-  const list = document.getElementById("commentsList");
-  list.innerHTML="";
-  comments.forEach((c,i)=>{
-    const div = document.createElement("div");
-    div.className="comment-item p-3 rounded-lg shadow-sm flex justify-between items-center";
-    div.innerHTML=`<span class="flex-grow mr-3">${c.comment}</span>
-                   <button onclick="deleteComment(${i})"><i class="fas fa-trash-alt text-red-500"></i></button>`;
-    list.appendChild(div);
-  });
+    const comments = JSON.parse(localStorage.getItem("comments")||"[]");
+    const list = document.getElementById("commentsList");
+    list.innerHTML="";
+    comments.forEach((c,i)=>{
+        const div = document.createElement("div");
+        div.className="comment-item p-3 rounded-lg shadow-sm flex justify-between items-center";
+        div.innerHTML=`<span class="flex-grow ml-3 text-gray-800">${c.comment}</span>
+                       <button onclick="deleteComment(${i})" class="text-gray-400 hover:text-red-500 transition duration-300"><i class="fas fa-trash-alt"></i></button>`;
+        list.appendChild(div);
+    });
 }
 function addComment(){
-  const input=document.getElementById("commentInput");
-  const txt=input.value.trim();
-  if(!txt) return alert("نظر خود را بنویسید.");
-  const comments=JSON.parse(localStorage.getItem("comments")||"[]");
-  comments.push({comment:txt,timestamp:new Date().toISOString()});
-  localStorage.setItem("comments",JSON.stringify(comments));
-  input.value=""; loadComments();
+    const input=document.getElementById("commentInput");
+    const txt=input.value.trim();
+    if(!txt) {
+        alert("لطفا نظر خود را وارد کنید.");
+        return;
+    }
+    const comments=JSON.parse(localStorage.getItem("comments")||"[]");
+    comments.unshift({comment:txt,timestamp:new Date().toISOString()}); // Add to the beginning
+    localStorage.setItem("comments",JSON.stringify(comments));
+    input.value="";
+    loadComments();
 }
 function deleteComment(i){
-  const comments=JSON.parse(localStorage.getItem("comments")||"[]");
-  comments.splice(i,1);
-  localStorage.setItem("comments",JSON.stringify(comments));
-  loadComments();
+    if(confirm("آیا از حذف این نظر مطمئن هستید؟")) {
+        const comments=JSON.parse(localStorage.getItem("comments")||"[]");
+        comments.splice(i,1);
+        localStorage.setItem("comments",JSON.stringify(comments));
+        loadComments();
+    }
 }
 document.addEventListener('DOMContentLoaded', loadComments);
 </script>
