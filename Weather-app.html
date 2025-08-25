@@ -8,31 +8,29 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;700&display=swap" rel="stylesheet">
 <style>
-    body { font-family: 'Vazirmatn', sans-serif; }
-    .weather-card {
-        background: linear-gradient(120deg, #e0f2fe 0%, #bae6fd 100%);
-        animation: fadeIn 0.8s ease-in-out;
-    }
-    .forecast-card {
-        background: linear-gradient(120deg, #f0f9ff 0%, #e0f2fe 100%);
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-    .forecast-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-    }
-    .comment-item {
-        background-color: #f9fafb;
-        border-right: 4px solid #2563eb;
-        transition: all 0.3s ease;
-    }
-    .comment-item:hover {
-        background-color: #e2e8f0;
-    }
-    @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(20px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
+body { font-family: 'Vazirmatn', sans-serif; }
+.weather-card {
+    background: linear-gradient(120deg, #e0f2fe 0%, #bae6fd 100%);
+    animation: fadeIn 0.8s ease-in-out;
+}
+.forecast-card {
+    background: linear-gradient(120deg, #f0f9ff 0%, #e0f2fe 100%);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.forecast-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+.comment-item {
+    background-color: #f9fafb;
+    border-right: 4px solid #2563eb;
+    transition: all 0.3s ease;
+}
+.comment-item:hover { background-color: #e2e8f0; }
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
 </style>
 </head>
 <body class="bg-gradient-to-br from-blue-200 to-blue-500 min-h-screen flex flex-col items-center p-6">
@@ -73,7 +71,7 @@
 </div>
 
 <footer class="mt-10 text-white font-semibold text-center drop-shadow-lg">
-    <p>&copy; طراحی شده توسط: ابوالفضل شاهمیرزایی سال ۱۴۰۴</p>
+    <p>&copy; طراحی: ابوالفضل شاهمیرزایی سال ۱۴۰۴</p>
     <p class="text-sm">این سایت از API OpenWeatherMap استفاده می‌کند❤️</p>
 </footer>
 
@@ -120,16 +118,15 @@ const iranProvinces = {
     "همدان":["همدان","ملایر","نهاوند","اسدآباد","تویسرکان","کبودرآهنگ","رزن","بهار"],
     "یزد":["یزد","میبد","اردکان","بافق","مهریز","تفت","ابرکوه","خاتم"]
 };
+
 const select = document.getElementById("citySelect");
 for(const province in iranProvinces){
     const optgroup = document.createElement("optgroup");
     optgroup.label = province;
-    // اضافه کردن خود استان به عنوان یک گزینه
     const provinceOption = document.createElement("option");
     provinceOption.value = province;
     provinceOption.textContent = province;
     optgroup.appendChild(provinceOption);
-    
     iranProvinces[province].forEach(city=>{
         const option = document.createElement("option");
         option.value = city;
@@ -140,19 +137,14 @@ for(const province in iranProvinces){
 }
 
 // ------------------ API OpenWeatherMap ------------------
-const apiKey = "d1fd1eedfc76111eb8a94ac59482e1d2"; // کلید خود را اینجا قرار دهید
+const apiKey = "d1fd1eedfc76111eb8a94ac59482e1d2";
 
 async function getWeather(){
     const city = select.value;
-    if(!city) {
-        alert("لطفا یک شهر را از لیست انتخاب کنید.");
-        return;
-    }
-
+    if(!city) { alert("لطفا یک شهر را از لیست انتخاب کنید."); return; }
     const weatherResultDiv = document.getElementById("weatherResult");
     const currentWeatherDiv = document.getElementById("currentWeather");
     const forecastDiv = document.getElementById("forecast");
-
     currentWeatherDiv.innerHTML = `<div class="text-center w-full"><i class="fas fa-spinner fa-spin text-4xl text-blue-500"></i><p class="mt-2 text-gray-600">در حال بارگذاری...</p></div>`;
     forecastDiv.innerHTML = '';
     weatherResultDiv.classList.remove('hidden');
@@ -163,16 +155,13 @@ async function getWeather(){
             fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city},IR&appid=${apiKey}&units=metric&lang=fa`),
             fetch(`https://api.openweathermap.org/data/2.5/forecast?q=${city},IR&appid=${apiKey}&units=metric&lang=fa`)
         ]);
-
         if (!weatherRes.ok || !forecastRes.ok) {
             const errorData = await weatherRes.json();
             throw new Error(`خطا در دریافت اطلاعات: ${errorData.message}`);
         }
-
         const weatherData = await weatherRes.json();
         const forecastData = await forecastRes.json();
 
-        // وضعیت فعلی
         currentWeatherDiv.innerHTML = `
             <div class="flex flex-col items-center">
                 <i class="fas fa-thermometer-half text-4xl text-blue-600"></i>
@@ -191,7 +180,6 @@ async function getWeather(){
                 <div class="mt-2 text-center"><p class="text-3xl font-bold">${weatherData.wind.speed.toFixed(1)} m/s</p><p class="text-sm text-gray-600">سرعت باد</p></div>
             </div>`;
 
-        // پیش‌بینی
         const dailyForecast = forecastData.list.filter((_, i) => i % 8 === 0).slice(0, 5);
         forecastDiv.innerHTML = dailyForecast.map(day => {
             const date = new Date(day.dt * 1000);
@@ -229,12 +217,9 @@ function loadComments(){
 function addComment(){
     const input=document.getElementById("commentInput");
     const txt=input.value.trim();
-    if(!txt) {
-        alert("لطفا نظر خود را وارد کنید.");
-        return;
-    }
+    if(!txt) { alert("لطفا نظر خود را وارد کنید."); return; }
     const comments=JSON.parse(localStorage.getItem("comments")||"[]");
-    comments.unshift({comment:txt,timestamp:new Date().toISOString()}); // Add to the beginning
+    comments.unshift({comment:txt,timestamp:new Date().toISOString()});
     localStorage.setItem("comments",JSON.stringify(comments));
     input.value="";
     loadComments();
@@ -247,7 +232,4 @@ function deleteComment(i){
         loadComments();
     }
 }
-document.addEventListener('DOMContentLoaded', loadComments);
-</script>
-</body>
-</html>
+document.addEvent
