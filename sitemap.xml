@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://weather-appabolfazlshahmi.static.domains/weather-app/</loc>
+    <loc>https://weather-appabolfazlsh.static.domains/weather-app/</loc>
     <lastmod>2024-08-24T10:00:00+03:30</lastmod> <!-- تاریخ آخرین بروزرسانی سایت -->
     <changefreq>daily</changefreq> <!-- فرکانس تغییر محتوا -->
     <priority>1.0</priority> <!-- اولویت این صفحه -->
@@ -9,7 +9,7 @@
   <!-- اگر صفحات دیگری داشتید، اینجا اضافه می‌شدند -->
   <!--
   <url>
-    <loc>https://weather-appash.static.domains/weather-app/about</loc>
+    <loc>https://iranweatherabsh.static.domains/weather-app/about</loc>
     <lastmod>2024-08-23T15:30:00+03:30</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
