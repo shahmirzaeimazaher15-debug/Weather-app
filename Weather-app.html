@@ -36,13 +36,12 @@
     }
     ::-webkit-scrollbar { width: 6px; }
     ::-webkit-scrollbar-thumb { background: #60a5fa; border-radius: 3px; }
-    
+
     /* Custom styles for the searchable dropdown */
     .custom-select-wrapper {
         position: relative;
         width: 100%;
         max-width: 400px;
-        z-index: 10;
     }
     .custom-select-trigger {
         cursor: pointer;
@@ -55,7 +54,8 @@
         align-items: center;
         transition: all 0.3s ease;
     }
-    .custom-select-trigger:hover {
+    .custom-select-trigger:focus {
+        outline: none;
         border-color: #60a5fa;
         box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.2);
     }
@@ -77,13 +77,8 @@
         cursor: pointer;
         transition: background-color 0.2s ease;
     }
-    .custom-option:hover {
+    .custom-option:hover, .custom-option.selected {
         background-color: #e2e8f0;
-    }
-    .custom-option.selected {
-        background-color: #bfdbfe;
-        color: #1e40af;
-        font-weight: bold;
     }
     .optgroup-label {
         padding: 0.5rem 1rem;
@@ -91,6 +86,9 @@
         font-weight: bold;
         color: #4b5563;
         border-bottom: 1px solid #e5e7eb;
+        position: sticky;
+        top: 0;
+        z-index: 10;
     }
 </style>
 </head>
@@ -104,12 +102,12 @@
         <label class="block mb-3 md:mb-0 font-bold text-lg text-gray-700">شهر مورد نظر خود را انتخاب کنید:</label>
         
         <div class="custom-select-wrapper w-full md:w-auto">
-            <div id="selectTrigger" class="custom-select-trigger border border-gray-300 rounded-lg w-full md:w-auto focus:ring-blue-500 focus:border-blue-500">
+            <div id="selectTrigger" class="custom-select-trigger" tabindex="0">
                 <span id="selectedOptionText" class="text-gray-500">-- انتخاب شهر --</span>
                 <i class="fas fa-chevron-down text-gray-400 text-sm mr-2"></i>
             </div>
             <div id="optionsContainer" class="custom-options-container">
-                <input id="searchInput" type="text" placeholder="جستجوی شهر..." class="w-full p-2 sticky top-0 bg-white border-b border-gray-200" onkeyup="searchSelect()">
+                <input id="searchInput" type="text" placeholder="جستجوی شهر..." class="w-full p-2 border-b border-gray-200 sticky top-0 bg-white" onkeyup="searchSelect()">
                 <div id="optionsList"></div>
             </div>
         </div>
@@ -189,7 +187,7 @@ const iranProvinces = {
     "یزد":["یزد","میبد","اردکان","بافق","مهریز","تفت","ابرکوه","خاتم"]
 };
 
-// ------------------ ایجاد دراپ‌داون کاستوم ------------------
+// ------------------ ایجاد و مدیریت دراپ‌داون کاستوم ------------------
 const selectWrapper = document.querySelector('.custom-select-wrapper');
 const selectTrigger = document.getElementById('selectTrigger');
 const optionsContainer = document.getElementById('optionsContainer');
@@ -198,20 +196,6 @@ const hiddenInput = document.getElementById('citySelect');
 const optionsList = document.getElementById('optionsList');
 const searchInput = document.getElementById('searchInput');
 
-selectTrigger.addEventListener('click', () => {
-    optionsContainer.style.display = optionsContainer.style.display === 'block' ? 'none' : 'block';
-    if(optionsContainer.style.display === 'block') {
-        searchInput.focus();
-        searchSelect();
-    }
-});
-
-document.addEventListener('click', (e) => {
-    if (!selectWrapper.contains(e.target)) {
-        optionsContainer.style.display = 'none';
-    }
-});
-
 function populateSelect() {
     optionsList.innerHTML = '';
     for(const province in iranProvinces){
@@ -219,7 +203,7 @@ function populateSelect() {
         optgroupLabel.className = "optgroup-label";
         optgroupLabel.textContent = province;
         optionsList.appendChild(optgroupLabel);
-
+        
         iranProvinces[province].forEach(city => {
             const optionDiv = document.createElement("div");
             optionDiv.className = "custom-option";
@@ -278,6 +262,21 @@ function searchSelect() {
         }
     });
 }
+
+selectTrigger.addEventListener('click', (event) => {
+    event.stopPropagation();
+    optionsContainer.style.display = optionsContainer.style.display === 'block' ? 'none' : 'block';
+    if(optionsContainer.style.display === 'block') {
+        searchInput.focus();
+        searchSelect();
+    }
+});
+
+document.addEventListener('click', (e) => {
+    if (!selectWrapper.contains(e.target)) {
+        optionsContainer.style.display = 'none';
+    }
+});
 
 document.addEventListener('DOMContentLoaded', populateSelect);
 
