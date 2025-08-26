@@ -26,7 +26,7 @@
             transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
             animation: fadeIn 0.8s ease-in-out;
             transform-origin: center;
-            color: #1a202c; /* Ensure text color is dark and readable */
+            color: #1a202c;
         }
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(20px); }
@@ -51,7 +51,6 @@
         }
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-thumb { background: #0ea5e9; border-radius: 3px; }
-
         .custom-select-trigger {
             border: none;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
@@ -95,12 +94,8 @@
             animation: pulse-slow 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
         }
         @keyframes pulse-slow {
-            0%, 100% {
-                opacity: 1;
-            }
-            50% {
-                opacity: .5;
-            }
+            0%, 100% { opacity: 1; }
+            50% { opacity: .5; }
         }
     </style>
 </head>
@@ -108,7 +103,7 @@
 
 <header class="text-center mb-8">
     <h1 class="text-5xl font-extrabold text-white drop-shadow-lg leading-tight animate-pulse-slow">☀️ هواشناسی ایران 🌧️</h1>
-    <p class="text-xl text-gray-200 mt-2 font-light">پیش‌بینی آب‌وهوا برای  تمامی استان‌ها و شهرهای مهم ایران</p>
+    <p class="text-xl text-gray-200 mt-2 font-light">پیش‌بینی آب‌وهوا برای تمامی استان‌ها و شهرهای مهم ایران</p>
     <p id="datetime" class="text-gray-300 mt-4 text-sm font-light"></p>
 </header>
 
@@ -152,7 +147,7 @@
 
 <footer class="mt-12 text-gray-300 font-semibold text-center drop-shadow-lg">
     <p>&copy; طراحی: ابوالفضل شاهمیرزایی سال ۱۴۰۴</p>
-    <p class="text-sm">این سایت از API WeatherAPI.com استفاده می‌کند ❤️</p>
+    <p class="text-sm">این سایت از API OpenWeatherMap.com استفاده می‌کند ❤️</p>
 </footer>
 
 <script>
@@ -198,13 +193,11 @@
         "همدان":["همدان","ملایر","نهاوند","اسدآباد","تویسرکان","کبودرآهنگ","رزن","بهار"],
         "یزد":["یزد","میبد","اردکان","بافق","مهریز","تفت","ابرکوه","خاتم"]
     };
-
-    const cityNamesEn = {
-        "تبریز": "Tabriz", "مراغه": "Maragheh", "مرند": "Marand", "بناب": "Bonab", "میانه": "Meyaneh", "اهر": "Ahar", "سراب": "Sarab", "شبستر": "Shabestar", "اسکو": "Osku", "جلفا": "Jolfa", "هشترود": "Hashtrud", "ارومیه": "Urmia", "خوی": "Khoy", "مهاباد": "Mahabad", "بوکان": "Bukan", "پیرانشهر": "Piranshahr", "میاندوآب": "Miandoab", "سردشت": "Sardasht", "ماکو": "Maku", "نقده": "Naqadeh", "سلماس": "Salmas", "اردبیل": "Ardabil", "پارس‌آباد": "Parsabad", "خلخال": "Khalkhal", "مشگین‌شهر": "Meshginshahr", "نمین": "Namin", "بیله‌سوار": "Bilesavar", "سرعین": "Sareyn", "نیر": "Neyyer", "کوثر": "Kowsar", "اصفهان": "Isfahan", "کاشان": "Kashan", "نجف‌آباد": "Najafabad", "شهرضا": "Shahreza", "مبارکه": "Mobarekeh", "گلپایگان": "Golpayegan", "نطنز": "Natanz", "فولادشهر": "Fouladshahr", "شاهین‌شهر": "Shahinsahr", "فلاورجان": "Falavarjan", "کرج": "Karaj", "طالقان": "Taleqan", "نظرآباد": "Nazarabad", "هشتگرد": "Hashtgerd", "اشتهارد": "Eshtehard", "فردیس": "Fardis", "ماهدشت": "Mahdasht", "کمال‌شهر": "Kamalshahr", "چهارباغ": "Chaharbāgh", "ایلام": "Ilam", "دهلران": "Dehloran", "مهران": "Mehran", "آبدانان": "Abdanan", "ایوان": "Eyvan", "دره‌شهر": "Darreh Shahr", "سرابله": "Sarableh", "بدره": "Badreh", "چرداول": "Chardavol", "بوشهر": "Bushehr", "برازجان": "Borazjan", "کنگان": "Kangan", "جم": "Jam", "گناوه": "Genaveh", "دشتی": "Dashti", "دیر": "Dayyer", "عسلویه": "Asaluyeh", "خارک": "Kharg", "تهران": "Tehran", "شهریار": "Shahriar", "اسلام‌شهر": "Eslamshahr", "ملارد": "Malard", "پاکدشت": "Pakdasht", "ورامین": "Varamin", "دماوند": "Damavand", "ری": "Ray", "شمیرانات": "Shemiranat", "پردیس": "Pardis", "رباط‌کریم": "Robat Karim", "شهرکرد": "Shahrekord", "بروجن": "Borujen", "لردگان": "Lordegan", "فرخشهر": "Farrokh Shahr", "سامان": "Saman", "هفشجان": "Hafshejan", "کیار": "Kiar", "فارسان": "Farsan", "بیرجند": "Birjand", "قائن": "Qaen", "فردوس": "Ferdows", "سرایان": "Sarayan", "طبس": "Tabas", "نهبندان": "Nehbandan", "بشرویه": "Boshruyeh", "سربیشه": "Sarbishé", "مشهد": "Mashhad", "نیشابور": "Nishabur", "سبزوار": "Sabzevar", "تربت‌حیدریه": "Torbat-e Heydarieh", "بردسکن": "Bardaskan", "فریمان": "Fariman", "گناباد": "Gonabad", "قوچان": "Quchan", "کاشمر": "Kashmar", "خواف": "Khaf", "بجنورد": "Bojnord", "شیروان": "Shirvan", "اسفراین": "Esfarayen", "جاجرم": "Jajarm", "مانه": "Maneh", "فاروج": "Faruj", "راز": "Raz", "گرمه": "Garmeh", "اهواز": "Ahvaz", "دزفول": "Dezful", "آبادان": "Abadan", "اندیمشک": "Andimeshk", "خرمشهر": "Khorramshahr", "ماهشهر": "Mahshahr", "بهبهان": "Behbahan", "مسجدسلیمان": "Masjed Soleyman", "ایذه": "Izeh", "شوشتر": "Shushtar", "زنجان": "Zanjan", "ابهر": "Abhar", "خرمدره": "Khorramdarreh", "قیدار": "Qeydar", "هیدج": "Hidaj", "سلطانیه": "Soltaniyeh", "زرین‌رود": "Zarrin Rud", "ماهنشان": "Mahneshan", "سمنان": "Semnan", "شاهرود": "Shahroud", "دامغان": "Damghan", "گرمسار": "Garmsar", "مهدی‌شهر": "Mehdishahr", "آرادان": "Aradan", "سرخه": "Sorkheh", "شهمیرزاد": "Shahmirzad", "زاهدان": "Zahedan", "زابل": "Zabol", "ایرانشهر": "Iranshahr", "چابهار": "Chabahar", "خاش": "Khash", "سراوان": "Saravan", "نیک‌شهر": "Nikshahr", "کنارک": "Konarak", "سرباز": "Sarbaz", "شیراز": "Shiraz", "مرودشت": "Marvdasht", "جهرم": "Jahrom", "فسا": "Fasa", "لار": "Lar", "کازرون": "Kazeroon", "داراب": "Darab", "اقلید": "Eqlid", "فیروزآباد": "Firuzabad", "استهبان": "Estahban", "قزوین": "Qazvin", "تاکستان": "Takestan", "الوند": "Alvand", "محمدیه": "Mohammadieh", "آبیک": "Abyek", "بویین‌زهرا": "Buin Zahra", "اقبالیه": "Iqbalieh", "شریفیه": "Sharifabad", "قم": "Qom", "جعفریه": "Jafariyeh", "کهک": "Kahak", "سلفچگان": "Salafchegan", "دستجرد": "Dastjerd", "قنوات": "Qanavat", "کوشک نصرت": "Kushk-e Nosrat", "سنندج": "Sanandaj", "سقز": "Saqqez", "مریوان": "Marivan", "بانه": "Baneh", "قروه": "Qorveh", "کامیاران": "Kamyaran", "دیواندره": "Divandarreh", "سروآباد": "Sarvabad", "کرمان": "Kerman", "سیرجان": "Sirjan", "رفسنجان": "Rafsanjan", "جیرفت": "Jiroft", "بم": "Bam", "زرند": "Zarand", "کهنوج": "Kahnuj", "بافت": "Baft", "کوهبنان": "Kuhbanan", "کرمانشاه": "Kermanshah", "اسلام‌آباد غرب": "Islamabad-e Gharb", "کنگاور": "Kangavar", "سنقر": "Sonqor", "هرسین": "Harsin", "صحنه": "Sahneh", "جوانرود": "Javanrud", "قصرشیرین": "Qasr-e Shirin", "یاسوج": "Yasuj", "دهدشت": "Dehdasht", "گچساران": "Gachsaran", "لیکک": "Likak", "باشت": "Basht", "چرام": "Charam", "سی‌سخت": "Sisikht", "سوق": "Suq", "گرگان": "Gorgan", "گنبد کاووس": "Gonbad-e Kavus", "علی‌آباد کتول": "Aliabad-e Katul", "بندر ترکمن": "Bandar-e Torkaman", "آزادشهر": "Azadshahr", "کردکوی": "Kordkuy", "کلاله": "Kalaleh", "مینودشت": "Minudasht", "رشت": "Rasht", "بندر انزلی": "Bandar-e Anzali", "لاهیجان": "Lahijan", "لنگرود": "Langerud", "رودسر": "Rudsar", "آستارا": "Astara", "صومعه‌سرا": "Sowme'eh Sara", "فومن": "Fuman", "سیاهکل": "Siahkal", "خرم‌آباد": "Khorramabad", "بروجرد": "Borujerd", "دورود": "Dorud", "کوهدشت": "Kuhdasht", "الشتر": "Alishtar", "نورآباد": "Nurabad", "ازنا": "Azna", "پلدختر": "Pol-e Dokhtar", "ساری": "Sari", "بابل": "Babol", "آمل": "Amol", "قائم‌شهر": "Qaem Shahr", "بهشهر": "Behshahr", "نوشهر": "Nowshahr", "چالوس": "Chalus", "تنکابن": "Tonekabon", "رامسر": "Ramsar", "بابلسر": "Babolsar", "اراک": "Arak", "ساوه": "Saveh", "خمین": "Khomein", "محلات": "Mahallat", "دلیجان": "Delijan", "تفرش": "Tafresh", "آشتیان": "Ashtian", "شازند": "Shazand", "بندرعباس": "Bandar Abbas", "میناب": "Minab", "دهبارز": "Dehbarz", "قشم": "Qeshm", "کیش": "Kish", "بندر لنگه": "Bandar-e Lengeh", "حاجی‌آباد": "Hajiabad", "رودان": "Rudan", "جاسک": "Jask", "همدان": "Hamadan", "ملایر": "Malayer", "نهاوند": "Nahavand", "اسدآباد": "Asadabad", "تویسرکان": "Tuyserkan", "کبودرآهنگ": "Kabudrahang", "رزن": "Razan", "بهار": "Bahar", "یزد": "Yazd", "میبد": "Meybod", "اردکان": "Ardakan", "بافق": "Bafq", "مهریز": "Mahriz", "تفت": "Taft", "ابرکوه": "Abarkuh", "خاتم": "Khatam"
-    };
-
     const provinceCentersEn = {
         "آذربایجان شرقی": "Tabriz", "آذربایجان غربی": "Urmia", "اردبیل": "Ardabil", "اصفهان": "Isfahan", "البرز": "Karaj", "ایلام": "Ilam", "بوشهر": "Bushehr", "تهران": "Tehran", "چهارمحال و بختیاری": "Shahrekord", "خراسان جنوبی": "Birjand", "خراسان رضوی": "Mashhad", "خراسان شمالی": "Bojnord", "خوزستان": "Ahvaz", "زنجان": "Zanjan", "سمنان": "Semnan", "سیستان و بلوچستان": "Zahedan", "فارس": "Shiraz", "قزوین": "Qazvin", "قم": "Qom", "کردستان": "Sanandaj", "کرمان": "Kerman", "کرمانشاه": "Kermanshah", "کهگیلویه و بویراحمد": "Yasuj", "گلستان": "Gorgan", "گیلان": "Rasht", "لرستان": "Khorramabad", "مازندران": "Sari", "مرکزی": "Arak", "هرمزگان": "Bandar Abbas", "همدان": "Hamadan", "یزد": "Yazd"
+    };
+    const cityNamesEn = {
+        "تبریز": "Tabriz", "مراغه": "Maragheh", "مرند": "Marand", "بناب": "Bonab", "میانه": "Meyaneh", "اهر": "Ahar", "سراب": "Sarab", "شبستر": "Shabestar", "اسکو": "Osku", "جلفا": "Jolfa", "هشترود": "Hashtrud", "ارومیه": "Urmia", "خوی": "Khoy", "مهاباد": "Mahabad", "بوکان": "Bukan", "پیرانشهر": "Piranshahr", "میاندوآب": "Miandoab", "سردشت": "Sardasht", "ماکو": "Maku", "نقده": "Naqadeh", "سلماس": "Salmas", "اردبیل": "Ardabil", "پارس‌آباد": "Parsabad", "خلخال": "Khalkhal", "مشگین‌شهر": "Meshginshahr", "نمین": "Namin", "بیله‌سوار": "Bilesavar", "سرعین": "Sareyn", "نیر": "Neyyer", "کوثر": "Kowsar", "اصفهان": "Isfahan", "کاشان": "Kashan", "نجف‌آباد": "Najafabad", "شهرضا": "Shahreza", "مبارکه": "Mobarekeh", "گلپایگان": "Golpayegan", "نطنز": "Natanz", "فولادشهر": "Fouladshahr", "شاهین‌شهر": "Shahinsahr", "فلاورجان": "Falavarjan", "کرج": "Karaj", "طالقان": "Taleqan", "نظرآباد": "Nazarabad", "هشتگرد": "Hashtgerd", "اشتهارد": "Eshtehard", "فردیس": "Fardis", "ماهدشت": "Mahdasht", "کمال‌شهر": "Kamalshahr", "چهارباغ": "Chaharbāgh", "ایلام": "Ilam", "دهلران": "Dehloran", "مهران": "Mehran", "آبدانان": "Abdanan", "ایوان": "Eyvan", "دره‌شهر": "Darreh Shahr", "سرابله": "Sarableh", "بدره": "Badreh", "چرداول": "Chardavol", "بوشهر": "Bushehr", "برازجان": "Borazjan", "کنگان": "Kangan", "جم": "Jam", "گناوه": "Genaveh", "دشتی": "Dashti", "دیر": "Dayyer", "عسلویه": "Asaluyeh", "خارک": "Kharg", "تهران": "Tehran", "شهریار": "Shahriar", "اسلام‌شهر": "Eslamshahr", "ملارد": "Malard", "پاکدشت": "Pakdasht", "ورامین": "Varamin", "دماوند": "Damavand", "ری": "Ray", "شمیرانات": "Shemiranat", "پردیس": "Pardis", "رباط‌کریم": "Robat Karim", "شهرکرد": "Shahrekord", "بروجن": "Borujen", "لردگان": "Lordegan", "فرخشهر": "Farrokh Shahr", "سامان": "Saman", "هفشجان": "Hafshejan", "کیار": "Kiar", "فارسان": "Farsan", "بیرجند": "Birjand", "قائن": "Qaen", "فردوس": "Ferdows", "سرایان": "Sarayan", "طبس": "Tabas", "نهبندان": "Nehbandan", "بشرویه": "Boshruyeh", "سربیشه": "Sarbishé", "مشهد": "Mashhad", "نیشابور": "Nishabur", "سبزوار": "Sabzevar", "تربت‌حیدریه": "Torbat-e Heydarieh", "بردسکن": "Bardaskan", "فریمان": "Fariman", "گناباد": "Gonabad", "قوچان": "Quchan", "کاشمر": "Kashmar", "خواف": "Khaf", "بجنورد": "Bojnord", "شیروان": "Shirvan", "اسفراین": "Esfarayen", "جاجرم": "Jajarm", "مانه": "Maneh", "فاروج": "Faruj", "راز": "Raz", "گرمه": "Garmeh", "اهواز": "Ahvaz", "دزفول": "Dezful", "آبادان": "Abadan", "اندیمشک": "Andimeshk", "خرمشهر": "Khorramshahr", "ماهشهر": "Mahshahr", "بهبهان": "Behbahan", "مسجدسلیمان": "Masjed Soleyman", "ایذه": "Izeh", "شوشتر": "Shushtar", "زنجان": "Zanjan", "ابهر": "Abhar", "خرمدره": "Khorramdarreh", "قیدار": "Qeydar", "هیدج": "Hidaj", "سلطانیه": "Soltaniyeh", "زرین‌رود": "Zarrin Rud", "ماهنشان": "Mahneshan", "سمنان": "Semnan", "شاهرود": "Shahroud", "دامغان": "Damghan", "گرمسار": "Garmsar", "مهدی‌شهر": "Mehdishahr", "آرادان": "Aradan", "سرخه": "Sorkheh", "شهمیرزاد": "Shahmirzad", "زاهدان": "Zahedan", "زابل": "Zabol", "ایرانشهر": "Iranshahr", "چابهار": "Chabahar", "خاش": "Khash", "سراوان": "Saravan", "نیک‌شهر": "Nikshahr", "کنارک": "Konarak", "سرباز": "Sarbaz", "شیراز": "Shiraz", "مرودشت": "Marvdasht", "جهرم": "Jahrom", "فسا": "Fasa", "لار": "Lar", "کازرون": "Kazeroon", "داراب": "Darab", "اقلید": "Eqlid", "فیروزآباد": "Firuzabad", "استهبان": "Estahban", "قزوین": "Qazvin", "تاکستان": "Takestan", "الوند": "Alvand", "محمدیه": "Mohammadieh", "آبیک": "Abyek", "بویین‌زهرا": "Buin Zahra", "اقبالیه": "Iqbalieh", "شریفیه": "Sharifabad", "قم": "Qom", "جعفریه": "Jafariyeh", "کهک": "Kahak", "سلفچگان": "Salafchegan", "دستجرد": "Dastjerd", "قنوات": "Qanavat", "کوشک نصرت": "Kushk-e Nosrat", "سنندج": "Sanandaj", "سقز": "Saqqez", "مریوان": "Marivan", "بانه": "Baneh", "قروه": "Qorveh", "کامیاران": "Kamyaran", "دیواندره": "Divandarreh", "سروآباد": "Sarvabad", "کرمان": "Kerman", "سیرجان": "Sirjan", "رفسنجان": "Rafsanjan", "جیرفت": "Jiroft", "بم": "Bam", "زرند": "Zarand", "کهنوج": "Kahnuj", "بافت": "Baft", "کوهبنان": "Kuhbanan", "کرمانشاه": "Kermanshah", "اسلام‌آباد غرب": "Islamabad-e Gharb", "کنگاور": "Kangavar", "سنقر": "Sonqor", "هرسین": "Harsin", "صحنه": "Sahneh", "جوانرود": "Javanrud", "قصرشیرین": "Qasr-e Shirin", "یاسوج": "Yasuj", "دهدشت": "Dehdasht", "گچساران": "Gachsaran", "لیکک": "Likak", "باشت": "Basht", "چرام": "Charam", "سی‌سخت": "Sisikht", "سوق": "Suq", "گرگان": "Gorgan", "گنبد کاووس": "Gonbad-e Kavus", "علی‌آباد کتول": "Aliabad-e Katul", "بندر ترکمن": "Bandar-e Torkaman", "آزادشهر": "Azadshahr", "کردکوی": "Kordkuy", "کلاله": "Kalaleh", "مینودشت": "Minudasht", "رشت": "Rasht", "بندر انزلی": "Bandar-e Anzali", "لاهیجان": "Lahijan", "لنگرود": "Langerud", "رودسر": "Rudsar", "آستارا": "Astara", "صومعه‌سرا": "Sowme'eh Sara", "فومن": "Fuman", "سیاهکل": "Siahkal", "خرم‌آباد": "Khorramabad", "بروجرد": "Borujerd", "دورود": "Dorud", "کوهدشت": "Kuhdasht", "الشتر": "Alishtar", "نورآباد": "Nurabad", "ازنا": "Azna", "پلدختر": "Pol-e Dokhtar", "ساری": "Sari", "بابل": "Babol", "آمل": "Amol", "قائم‌شهر": "Qaem Shahr", "بهشهر": "Behshahr", "نوشهر": "Nowshahr", "چالوس": "Chalus", "تنکابن": "Tonekabon", "رامسر": "Ramsar", "بابلسر": "Babolsar", "اراک": "Arak", "ساوه": "Saveh", "خمین": "Khomein", "محلات": "Mahallat", "دلیجان": "Delijan", "تفرش": "Tafresh", "آشتیان": "Ashtian", "شازند": "Shazand", "بندرعباس": "Bandar Abbas", "میناب": "Minab", "دهبارز": "Dehbarz", "قشم": "Qeshm", "کیش": "Kish", "بندر لنگه": "Bandar-e Lengeh", "حاجی‌آباد": "Hajiabad", "رودان": "Rudan", "جاسک": "Jask", "همدان": "Hamadan", "ملایر": "Malayer", "نهاوند": "Nahavand", "اسدآباد": "Asadabad", "تویسرکان": "Tuyserkan", "کبودرآهنگ": "Kabudrahang", "رزن": "Razan", "بهار": "Bahar", "یزد": "Yazd", "میبد": "Meybod", "اردکان": "Ardakan", "بافق": "Bafq", "مهریز": "Mahriz", "تفت": "Taft", "ابرکوه": "Abarkuh", "خاتم": "Khatam"
     };
 
     // ------------------ مدیریت دراپ‌داون کاستوم ------------------
@@ -273,7 +266,6 @@
                 option.style.display = "none";
             }
         });
-
         labels.forEach(label => {
             let hasVisibleOptions = false;
             let nextSibling = label.nextElementSibling;
@@ -311,83 +303,49 @@
             selectTrigger.querySelector('i').style.transform = 'rotate(0deg)';
         }
     });
-
     document.addEventListener('DOMContentLoaded', populateSelect);
 
-    // ------------------ API WeatherAPI.com ------------------
-    const apiKey ="44fb6b68fd9f41a19a2125317252608"; // کلید API شما
-
-    const weatherIconMap = {
-        1000: 'fas fa-sun',
-        1003: 'fas fa-cloud-sun',
-        1006: 'fas fa-cloud',
-        1009: 'fas fa-cloud-meatball',
-        1030: 'fas fa-smog',
-        1063: 'fas fa-cloud-showers-heavy',
-        1066: 'fas fa-snowflake',
-        1069: 'fas fa-cloud-showers-heavy',
-        1072: 'fas fa-cloud-rain',
-        1087: 'fas fa-bolt',
-        1114: 'fas fa-snowflake',
-        1117: 'fas fa-wind',
-        1135: 'fas fa-smog',
-        1147: 'fas fa-smog',
-        1150: 'fas fa-cloud-rain',
-        1153: 'fas fa-cloud-rain',
-        1168: 'fas fa-cloud-rain',
-        1171: 'fas fa-cloud-rain',
-        1180: 'fas fa-cloud-rain',
-        1183: 'fas fa-cloud-rain',
-        1186: 'fas fa-cloud-showers-heavy',
-        1189: 'fas fa-cloud-showers-heavy',
-        1192: 'fas fa-cloud-showers-heavy',
-        1195: 'fas fa-cloud-showers-heavy',
-        1198: 'fas fa-cloud-rain',
-        1201: 'fas fa-cloud-showers-heavy',
-        1204: 'fas fa-cloud-showers-heavy',
-        1207: 'fas fa-cloud-showers-heavy',
-        1210: 'fas fa-snowflake',
-        1213: 'fas fa-snowflake',
-        1216: 'fas fa-snowflake',
-        1219: 'fas fa-snowflake',
-        1222: 'fas fa-snowflake',
-        1225: 'fas fa-snowflake',
-        1237: 'fas fa-cloud-showers-heavy',
-        1240: 'fas fa-cloud-rain',
-        1243: 'fas fa-cloud-showers-heavy',
-        1246: 'fas fa-cloud-showers-heavy',
-        1249: 'fas fa-cloud-showers-heavy',
-        1252: 'fas fa-cloud-showers-heavy',
-        1255: 'fas fa-snowflake',
-        1258: 'fas fa-snowflake',
-        1261: 'fas fa-cloud-rain',
-        1264: 'fas fa-cloud-showers-heavy',
-        1273: 'fas fa-bolt',
-        1276: 'fas fa-bolt',
-        1279: 'fas fa-bolt',
-        1282: 'fas fa-bolt',
-    };
+    // ------------------ API OpenWeatherMap.org ------------------
+    const apiKey = "54542aad11e6d0444276d7f8c246f339";
     
-    function getWeatherBgClass(conditionText) {
-        const condition = conditionText.toLowerCase();
-        if (condition.includes('آفتابی') || condition.includes('صاف')) return 'bg-gradient-to-br from-yellow-100 to-yellow-300';
-        if (condition.includes('ابری') || condition.includes('نیمه ابری')) return 'bg-gradient-to-br from-gray-100 to-gray-300';
-        if (condition.includes('بارانی') || condition.includes('باران') || condition.includes('رگبار')) return 'bg-gradient-to-br from-blue-200 to-blue-400';
-        if (condition.includes('برفی') || condition.includes('برف')) return 'bg-gradient-to-br from-white to-blue-100';
-        if (condition.includes('مه')) return 'bg-gradient-to-br from-gray-200 to-gray-400';
-        if (condition.includes('رعد و برق') || condition.includes('تندر')) return 'bg-gradient-to-br from-slate-300 to-slate-500';
+    const weatherIconMap = {
+        '01d': 'fas fa-sun', // clear sky
+        '01n': 'fas fa-moon',
+        '02d': 'fas fa-cloud-sun', // few clouds
+        '02n': 'fas fa-cloud-moon',
+        '03d': 'fas fa-cloud', // scattered clouds
+        '03n': 'fas fa-cloud',
+        '04d': 'fas fa-cloud-meatball', // broken clouds
+        '04n': 'fas fa-cloud-meatball',
+        '09d': 'fas fa-cloud-showers-heavy', // shower rain
+        '09n': 'fas fa-cloud-showers-heavy',
+        '10d': 'fas fa-cloud-rain', // rain
+        '10n': 'fas fa-cloud-rain',
+        '11d': 'fas fa-bolt', // thunderstorm
+        '11n': 'fas fa-bolt',
+        '13d': 'fas fa-snowflake', // snow
+        '13n': 'fas fa-snowflake',
+        '50d': 'fas fa-smog', // mist
+        '50n': 'fas fa-smog',
+    };
+    function getWeatherBgClass(conditionId) {
+        if (conditionId >= 200 && conditionId < 300) return 'bg-gradient-to-br from-slate-300 to-slate-500';
+        if (conditionId >= 300 && conditionId < 500) return 'bg-gradient-to-br from-blue-200 to-blue-400';
+        if (conditionId >= 500 && conditionId < 600) return 'bg-gradient-to-br from-blue-200 to-blue-400';
+        if (conditionId >= 600 && conditionId < 700) return 'bg-gradient-to-br from-white to-blue-100';
+        if (conditionId >= 700 && conditionId < 800) return 'bg-gradient-to-br from-gray-200 to-gray-400';
+        if (conditionId === 800) return 'bg-gradient-to-br from-yellow-100 to-yellow-300';
+        if (conditionId > 800) return 'bg-gradient-to-br from-gray-100 to-gray-300';
         return 'bg-white';
     }
-
-    function getWeatherIconColor(conditionText) {
-        const condition = conditionText.toLowerCase();
-        if (condition.includes('آفتابی') || condition.includes('صاف')) return 'text-yellow-500';
-        if (condition.includes('بارانی') || condition.includes('باران')) return 'text-blue-600';
-        if (condition.includes('برفی') || condition.includes('برف')) return 'text-sky-300';
-        if (condition.includes('ابری') || condition.includes('نیمه ابری')) return 'text-gray-500';
+    function getWeatherIconColor(conditionId) {
+        if (conditionId >= 200 && conditionId < 600) return 'text-blue-600';
+        if (conditionId >= 600 && conditionId < 700) return 'text-sky-300';
+        if (conditionId >= 700 && conditionId < 800) return 'text-gray-500';
+        if (conditionId === 800) return 'text-yellow-500';
+        if (conditionId > 800) return 'text-gray-500';
         return 'text-blue-600';
     }
-
     async function getWeather(){
         const selectedFaName = document.getElementById("citySelect").value;
         if(!selectedFaName) { alert("لطفا یک شهر یا استان را انتخاب کنید."); return; }
@@ -396,48 +354,50 @@
         if (provinceCentersEn[selectedFaName]) {
             cityEn = provinceCentersEn[selectedFaName];
         } else {
-            cityEn = cityNamesEn[selectedFaName] || selectedFaName;
+            cityEn = cityNamesEn[selectedFaName];
         }
 
         const weatherResultDiv = document.getElementById("weatherResult");
         const currentWeatherDiv = document.getElementById("currentWeather");
         const forecastDiv = document.getElementById("forecast");
-
+        
+        weatherResultDiv.classList.add('hidden', 'opacity-0');
         currentWeatherDiv.innerHTML = `<div class="text-center w-full"><i class="fas fa-spinner fa-spin text-5xl text-blue-500"></i><p class="mt-4 text-xl text-gray-600">در حال بارگذاری...</p></div>`;
         forecastDiv.innerHTML = '';
         weatherResultDiv.classList.remove('hidden');
         setTimeout(() => { weatherResultDiv.classList.remove('opacity-0'); }, 10);
 
+        if (!cityEn) {
+            currentWeatherDiv.innerHTML = `<div class="text-center w-full text-red-600"><i class="fas fa-exclamation-triangle text-4xl mb-2"></i><p class="text-lg">نام شهر انتخاب شده یافت نشد.</p></div>`;
+            return;
+        }
+
         try {
-            const weatherApiUrl = `https://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${cityEn}&lang=fa`;
-            const forecastApiUrl = `https://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=${cityEn}&days=5&lang=fa`;
-
-            const [weatherRes, forecastRes] = await Promise.all([
-                fetch(weatherApiUrl),
-                fetch(forecastApiUrl)
-            ]);
-
-            if (!weatherRes.ok || !forecastRes.ok) {
-                const errorData = await weatherRes.json();
-                throw new Error(`خطا در دریافت اطلاعات: ${errorData.error.message}`);
+            const currentRes = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${cityEn},IR&appid=${apiKey}&units=metric&lang=fa`);
+            if (currentRes.status === 404) {
+                currentWeatherDiv.innerHTML = `<div class="text-center w-full text-red-600"><i class="fas fa-exclamation-triangle text-4xl mb-2"></i><p class="text-lg">متاسفانه اطلاعات آب‌وهوای این شهر در دسترس نیست.</p></div>`;
+                return;
             }
-
-            const weatherData = await weatherRes.json();
+            if (!currentRes.ok) {
+                throw new Error(`خطا در دریافت اطلاعات. کد خطا: ${currentRes.status}`);
+            }
+            const currentData = await currentRes.json();
+            const forecastRes = await fetch(`https://api.openweathermap.org/data/2.5/forecast?q=${cityEn},IR&appid=${apiKey}&units=metric&lang=fa`);
             const forecastData = await forecastRes.json();
 
-            const weatherConditionCode = weatherData.current.condition.code;
-            const weatherConditionFa = weatherData.current.condition.text;
-            const weatherIconClass = weatherIconMap[weatherConditionCode] || 'fas fa-question-circle';
-            const weatherBgClass = getWeatherBgClass(weatherConditionFa);
-            const weatherIconColor = getWeatherIconColor(weatherConditionFa);
-
+            const weatherConditionCode = currentData.weather[0].id;
+            const weatherConditionFa = currentData.weather[0].description;
+            const weatherIconId = currentData.weather[0].icon;
+            const weatherIconClass = weatherIconMap[weatherIconId] || 'fas fa-question-circle';
+            const weatherBgClass = getWeatherBgClass(weatherConditionCode);
+            const weatherIconColor = getWeatherIconColor(weatherConditionCode);
+            
             currentWeatherDiv.className = `weather-card p-8 rounded-3xl shadow-xl mb-8 flex flex-col sm:flex-row justify-around items-center space-y-6 sm:space-y-0 text-center relative ${weatherBgClass}`;
-
             currentWeatherDiv.innerHTML = `
                 <div class="flex flex-col items-center">
                     <i class="${weatherIconClass} text-8xl ${weatherIconColor} drop-shadow-lg"></i>
                     <div class="mt-4 text-center">
-                        <p class="text-5xl font-extrabold text-blue-800">${weatherData.current.temp_c.toFixed(1)}°C</p>
+                        <p class="text-5xl font-extrabold text-blue-800">${currentData.main.temp.toFixed(1)}°C</p>
                         <p class="text-lg text-gray-700">دما</p>
                     </div>
                 </div>
@@ -446,37 +406,41 @@
                     <div class="mt-2 text-center">
                         <p class="text-xl font-semibold capitalize text-gray-800">${weatherConditionFa}</p>
                         <p class="text-sm text-gray-600">وضعیت</p>
-                    </div>
+                </div>
                 </div>
                 <div class="flex flex-col items-center">
                     <i class="fas fa-tint text-6xl text-blue-400"></i>
                     <div class="mt-2 text-center">
-                        <p class="text-4xl font-bold text-gray-800">${weatherData.current.humidity}%</p>
+                        <p class="text-4xl font-bold text-gray-800">${currentData.main.humidity}%</p>
                         <p class="text-sm text-gray-600">رطوبت</p>
-                    </div>
+                </div>
                 </div>
                 <div class="flex flex-col items-center">
                     <i class="fas fa-wind text-6xl text-gray-400"></i>
                     <div class="mt-2 text-center">
-                        <p class="text-4xl font-bold text-gray-800">${weatherData.current.wind_kph.toFixed(1)} km/h</p>
+                        <p class="text-4xl font-bold text-gray-800">${(currentData.wind.speed * 3.6).toFixed(1)} km/h</p>
                         <p class="text-sm text-gray-600">سرعت باد</p>
-                    </div>
+                </div>
                 </div>`;
 
-            const dailyForecast = forecastData.forecast.forecastday.slice(0, 5);
-            forecastDiv.innerHTML = dailyForecast.map(day => {
-                const date = new Date(day.date);
+            const dailyForecasts = forecastData.list.filter(item => item.dt_txt.includes("12:00:00"));
+            const finalForecasts = dailyForecasts.slice(0, 5);
+
+            forecastDiv.innerHTML = finalForecasts.map(day => {
+                const date = new Date(day.dt * 1000);
                 const dayName = date.toLocaleDateString('fa-IR', { weekday: 'short' });
                 const formattedDate = date.toLocaleDateString('fa-IR', { day: 'numeric', month: 'numeric' });
-                const forecastIconClass = weatherIconMap[day.day.condition.code] || 'fas fa-question-circle';
-                const forecastIconColor = getWeatherIconColor(day.day.condition.text);
+                const forecastIconId = day.weather[0].icon;
+                const forecastIconClass = weatherIconMap[forecastIconId] || 'fas fa-question-circle';
+                const forecastIconColor = getWeatherIconColor(day.weather[0].id);
+                const forecastConditionFa = day.weather[0].description;
                 return `
                     <div class="forecast-card shadow-lg rounded-2xl p-6 text-center flex flex-col items-center">
                         <p class="font-bold text-lg text-gray-800">${dayName}</p>
                         <p class="text-sm text-gray-500">${formattedDate}</p>
                         <i class="${forecastIconClass} text-5xl ${forecastIconColor} my-4"></i>
-                        <p class="text-2xl font-bold my-2 text-blue-800">${day.day.avgtemp_c.toFixed(1)}°C</p>
-                        <p class="text-sm capitalize text-gray-600">${day.day.condition.text}</p>
+                        <p class="text-2xl font-bold my-2 text-blue-800">${day.main.temp.toFixed(1)}°C</p>
+                        <p class="text-sm capitalize text-gray-600">${forecastConditionFa}</p>
                     </div>`;
             }).join("");
         } catch (err) {
@@ -495,7 +459,7 @@
             const div = document.createElement("div");
             div.className="comment-item p-4 rounded-xl shadow-md flex justify-between items-center";
             div.innerHTML=`<span class="flex-grow ml-3 text-gray-800">${c.comment}</span>
-                                 <button onclick="deleteComment(${i})" class="text-gray-400 hover:text-red-500 transition duration-300"><i class="fas fa-trash-alt"></i></button>`;
+                           <button onclick="deleteComment(${i})" class="text-gray-400 hover:text-red-500 transition duration-300"><i class="fas fa-trash-alt"></i></button>`;
             list.appendChild(div);
         });
     }
