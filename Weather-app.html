@@ -347,15 +347,27 @@ async function showCityInfo() {
 
     try {
         const weatherUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric&lang=fa`;
-        const weatherRes = await fetch(`https://api.allorigins.win/raw?url=${encodeURIComponent(weatherUrl)}`);
-        if (!weatherRes.ok) throw new Error("خطا در دریافت اطلاعات آب‌وهوا");
-        const weatherData = await weatherRes.json();
-        
         const forecastUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric&lang=fa`;
-        const forecastRes = await fetch(`https://api.allorigins.win/raw?url=${encodeURIComponent(forecastUrl)}`);
-        if (!forecastRes.ok) throw new Error("خطا در دریافت پیش‌بینی آب‌وهوا");
+
+        // Using a new, hopefully more stable CORS proxy
+        const proxyUrl = `https://proxy-cors.sutanlab.id/`;
+
+        console.log("در حال تلاش برای دریافت اطلاعات آب و هوا...");
+        const [weatherRes, forecastRes] = await Promise.all([
+            fetch(`${proxyUrl}${weatherUrl}`),
+            fetch(`${proxyUrl}${forecastUrl}`)
+        ]);
+
+        if (!weatherRes.ok || !forecastRes.ok) {
+            console.error("خطا در پاسخ API:", weatherRes.status, forecastRes.status);
+            throw new Error("خطا در دریافت اطلاعات. پاسخ API موفق نبود.");
+        }
+
+        const weatherData = await weatherRes.json();
         const forecastData = await forecastRes.json();
 
+        console.log("اطلاعات آب و هوا با موفقیت دریافت شد:", weatherData);
+        
         const iconCode = weatherData.weather[0].icon;
         const iconUrl = `http://openweathermap.org/img/wn/${iconCode}@2x.png`;
         
@@ -388,7 +400,7 @@ async function showCityInfo() {
             ${forecastHtml}
         `;
     } catch (e) {
-        console.error(e);
+        console.error("خطا در اجرای درخواست:", e);
         cityInfoBox.innerHTML = `<h2>${selectedCity}</h2><p>❌ خطایی در دریافت اطلاعات رخ داده است. لطفاً دوباره تلاش کنید.</p>`;
     }
 }
