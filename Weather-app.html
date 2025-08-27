@@ -295,6 +295,9 @@
 
 <script>
     const API_KEY = "679c8df302790ff616c5e67316a119e4";
+    // آدرس پروکسی جدید و مطمئن‌تر
+    const PROXY_URL = "https://api.allorigins.win/get?url=";
+
 
     const provinces = [
         {fa_name:"آذربایجان شرقی", cities:[{fa:"تبریز",lat:38.08,lon:46.29},{fa:"مراغه",lat:37.39,lon:46.23},{fa:"مرند",lat:38.44,lon:46.10},{fa:"اهر",lat:38.48,lon:46.91},{fa:"میانه",lat:37.38,lon:47.70},{fa:"بناب",lat:37.33,lon:46.06},{fa:"اسکو",lat:37.91,lon:46.12},{fa:"شبستر",lat:38.16,lon:45.71},{fa:"سراب",lat:37.95,lon:47.54},{fa:"جلفا",lat:38.93,lon:45.62},{fa:"آذرشهر",lat:37.77,lon:46.11},{fa:"عجب‌شیر",lat:37.49,lon:46.16},{fa:"هریس",lat:38.35,lon:46.85},{fa:"ملکان",lat:37.12,lon:46.11},{fa:"ورزقان",lat:38.56,lon:46.64},{fa:"کلیبر",lat:38.89,lon:46.99},{fa:"بستان‌آباد",lat:37.90,lon:46.68},{fa:"چاراویماق",lat:36.95,lon:46.72},{fa:"خداآفرین",lat:39.12,lon:46.88},{fa:"احدآباد",lat:37.66,lon:46.06},{fa:"قره آغاج",lat:37.49,lon:46.93},{fa:"خسروشهر",lat:37.92,lon:46.17},{fa:"گوگان",lat:37.72,lon:46.14}]},
@@ -373,29 +376,32 @@
             const weatherUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric&lang=fa`;
             const forecastUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric&lang=fa`;
             
-            const proxyUrl = `https://corsproxy.io/?`;
-            
             console.log("در حال تلاش برای دریافت اطلاعات آب و هوا...");
+            
             const [weatherRes, forecastRes] = await Promise.all([
-                fetch(`${proxyUrl}${encodeURIComponent(weatherUrl)}`),
-                fetch(`${proxyUrl}${encodeURIComponent(forecastUrl)}`)
+                fetch(`${PROXY_URL}${encodeURIComponent(weatherUrl)}`),
+                fetch(`${PROXY_URL}${encodeURIComponent(forecastUrl)}`)
             ]);
 
             if (!weatherRes.ok || !forecastRes.ok) {
-                console.error("خطا در پاسخ API:", weatherRes.status, forecastRes.status);
-                throw new Error("خطا در دریافت اطلاعات. پاسخ API موفق نبود.");
+                console.error("خطا در پاسخ پروکسی:", weatherRes.status, forecastRes.status);
+                throw new Error("خطا در دریافت اطلاعات. پاسخ پروکسی موفق نبود.");
             }
 
             const weatherData = await weatherRes.json();
             const forecastData = await forecastRes.json();
 
-            console.log("اطلاعات آب و هوا با موفقیت دریافت شد:", weatherData);
+            // Allorigins.win returns a JSON object with a 'contents' field
+            const weatherContents = JSON.parse(weatherData.contents);
+            const forecastContents = JSON.parse(forecastData.contents);
 
-            const iconCode = weatherData.weather[0].icon;
+            console.log("اطلاعات آب و هوا با موفقیت دریافت شد:", weatherContents);
+
+            const iconCode = weatherContents.weather[0].icon;
             const iconUrl = `http://openweathermap.org/img/wn/${iconCode}@2x.png`;
 
             let forecastHtml = "<h3>پیش‌بینی ۵ روز آینده:</h3><ul class='forecast-list'>";
-            const dailyForecasts = forecastData.list.filter(item => item.dt_txt.includes("12:00:00"));
+            const dailyForecasts = forecastContents.list.filter(item => item.dt_txt.includes("12:00:00"));
             dailyForecasts.slice(0, 5).forEach(item => {
                 const dayName = new Date(item.dt * 1000).toLocaleDateString('fa-IR', { weekday: 'long' });
                 const forecastIconCode = item.weather[0].icon;
@@ -413,12 +419,12 @@
             cityInfoBox.innerHTML = `
                 <h2>${selectedCity}</h2>
                 <div class="weather-main-info">
-                    <img src="${iconUrl}" alt="${weatherData.weather[0].description}" class="weather-icon">
-                    <p><strong>دما:</strong> ${Math.round(weatherData.main.temp)}°C</p>
-                    <p><strong>آب‌وهوا:</strong> ${weatherData.weather[0].description}</p>
+                    <img src="${iconUrl}" alt="${weatherContents.weather[0].description}" class="weather-icon">
+                    <p><strong>دما:</strong> ${Math.round(weatherContents.main.temp)}°C</p>
+                    <p><strong>آب‌وهوا:</strong> ${weatherContents.weather[0].description}</p>
                 </div>
-                <p><strong>حداقل دما:</strong> ${Math.round(weatherData.main.temp_min)}°C | <strong>حداکثر دما:</strong> ${Math.round(weatherData.main.temp_max)}°C</p>
-                <p><strong>رطوبت:</strong> ${weatherData.main.humidity}% | <strong>سرعت باد:</strong> ${weatherData.wind.speed} m/s</p>
+                <p><strong>حداقل دما:</strong> ${Math.round(weatherContents.main.temp_min)}°C | <strong>حداکثر دما:</strong> ${Math.round(weatherContents.main.temp_max)}°C</p>
+                <p><strong>رطوبت:</strong> ${weatherContents.main.humidity}% | <strong>سرعت باد:</strong> ${weatherContents.wind.speed} m/s</p>
                 ${forecastHtml}
             `;
         } catch (e) {
