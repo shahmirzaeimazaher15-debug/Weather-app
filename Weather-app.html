@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>اپلیکیشن هواشناسی تمامی استان ها و شهرهای مهم ایران</title>
+    <title>  وضعیت آب‌وهوا تمام استان ها و شهرهای مهم ایران</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700&display=swap');
 
@@ -346,11 +346,11 @@ async function showCityInfo() {
     cityInfoBox.innerHTML = `<h2>${selectedCity}</h2><p>⏳ در حال بارگذاری...</p>`;
 
     try {
-        const weatherRes = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric&lang=fa`);
+        const weatherRes = await fetch(`https://corsproxy.io/?https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric&lang=fa`);
         if (!weatherRes.ok) throw new Error("خطا در دریافت اطلاعات آب‌وهوا");
         const weatherData = await weatherRes.json();
         
-        const forecastRes = await fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric&lang=fa`);
+        const forecastRes = await fetch(`https://corsproxy.io/?https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric&lang=fa`);
         if (!forecastRes.ok) throw new Error("خطا در دریافت پیش‌بینی آب‌وهوا");
         const forecastData = await forecastRes.json();
 
