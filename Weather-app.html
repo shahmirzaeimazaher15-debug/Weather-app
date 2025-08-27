@@ -18,7 +18,7 @@
 
         body {
             font-family: 'Vazirmatn', sans-serif;
-            background: linear-gradient(135deg, #1e3a8a, #0c4a6e);
+            background: linear-gradient(135deg, #87CEEB, #4682B4); /* پس‌زمینه جدید آبی آسمانی */
             color: #e0f7ff;
             display: flex;
             justify-content: center;
@@ -104,7 +104,7 @@
         }
 
         .form-group option {
-            background-color: #1e3a8a;
+            background-color: #4682B4; /* رنگ پس‌زمینه گزینه‌ها */
             color: #fff;
         }
 
@@ -294,10 +294,8 @@
 </div>
 
 <script>
-    const API_KEY = "679c8df302790ff616c5e67316a119e4";
-    // آدرس پروکسی جدید و مطمئن‌تر
-    const PROXY_URL = "https://api.allorigins.win/get?url=";
-
+    const API_KEY = "679c8df302790ff616c5e67316a119e4"; // کلید API خودتان
+    const PROXY_URL = "https://corsproxy.io/?https://api.openweathermap.org/data/2.5/";
 
     const provinces = [
         {fa_name:"آذربایجان شرقی", cities:[{fa:"تبریز",lat:38.08,lon:46.29},{fa:"مراغه",lat:37.39,lon:46.23},{fa:"مرند",lat:38.44,lon:46.10},{fa:"اهر",lat:38.48,lon:46.91},{fa:"میانه",lat:37.38,lon:47.70},{fa:"بناب",lat:37.33,lon:46.06},{fa:"اسکو",lat:37.91,lon:46.12},{fa:"شبستر",lat:38.16,lon:45.71},{fa:"سراب",lat:37.95,lon:47.54},{fa:"جلفا",lat:38.93,lon:45.62},{fa:"آذرشهر",lat:37.77,lon:46.11},{fa:"عجب‌شیر",lat:37.49,lon:46.16},{fa:"هریس",lat:38.35,lon:46.85},{fa:"ملکان",lat:37.12,lon:46.11},{fa:"ورزقان",lat:38.56,lon:46.64},{fa:"کلیبر",lat:38.89,lon:46.99},{fa:"بستان‌آباد",lat:37.90,lon:46.68},{fa:"چاراویماق",lat:36.95,lon:46.72},{fa:"خداآفرین",lat:39.12,lon:46.88},{fa:"احدآباد",lat:37.66,lon:46.06},{fa:"قره آغاج",lat:37.49,lon:46.93},{fa:"خسروشهر",lat:37.92,lon:46.17},{fa:"گوگان",lat:37.72,lon:46.14}]},
@@ -332,7 +330,6 @@
         {fa_name:"همدان", cities:[{fa:"همدان",lat:34.79,lon:48.51},{fa:"ملایر",lat:34.30,lon:48.82},{fa:"نهاوند",lat:34.18,lon:48.38},{fa:"تویسرکان",lat:34.42,lon:48.45},{fa:"اسدآباد",lat:34.78,lon:48.17},{fa:"کبودرآهنگ",lat:35.25,lon:48.88},{fa:"بهار",lat:34.88,lon:48.42},{fa:"رزن",lat:35.68,lon:49.37},{fa:"فامنین",lat:35.21,lon:48.97},{fa:"قهاوند",lat:34.86,lon:48.97},{fa:"مریانج",lat:34.81,lon:48.44},{fa:"جورقان",lat:34.86,lon:48.42},{fa:"شیرین‌سو",lat:35.36,lon:48.77},{fa:"صالح‌آباد",lat:34.90,lon:48.16},{fa:"دمق",lat:34.74,lon:48.87},{fa:"سنگستان",lat:34.90,lon:48.24},{fa:"اسلام‌شهر",lat:35.55,lon:51.22},{fa:"لالجین",lat:35.03,lon:48.41},{fa:"گیان",lat:34.10,lon:48.33},{fa:"قروه درجزین",lat:35.64,lon:49.20}]},
         {fa_name:"یزد", cities:[{fa:"یزد",lat:31.89,lon:54.35},{fa:"میبد",lat:32.22,lon:54.01},{fa:"اردکان",lat:32.32,lon:54.01},{fa:"تفت",lat:31.77,lon:54.09},{fa:"بافق",lat:31.62,lon:55.43},{fa:"ابرکوه",lat:30.93,lon:53.28},{fa:"مهریز",lat:31.57,lon:54.45},{fa:"اشکذر",lat:31.99,lon:54.14},{fa:"طبس",lat:33.59,lon:56.91},{fa:"هرات",lat:30.40,lon:53.64},{fa:"مروست",lat:30.40,lon:54.67},{fa:"عقدا",lat:32.61,lon:53.79},{fa:"بهاباد",lat:32.06,lon:56.24},{fa:"زارچ",lat:31.98,lon:54.21},{fa:"نیر",lat:31.78,lon:54.12},{fa:"احمدآباد",lat:31.67,lon:54.06},{fa:"سرداب",lat:31.98,lon:54.40},{fa:"صدرآباد",lat:32.18,lon:54.11},{fa:"فهرج",lat:31.80,lon:54.07},{fa:"عیش‌آباد",lat:32.00,lon:54.14},{fa:"مروست",lat:30.40,lon:54.67}]}
     ];
-
 
     const provinceSelect = document.getElementById("provinceSelect");
     const citySelect = document.getElementById("citySelect");
@@ -373,14 +370,14 @@
         cityInfoBox.innerHTML = `<h2>${selectedCity}</h2><p>⏳ در حال بارگذاری...</p>`;
 
         try {
-            const weatherUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric&lang=fa`;
-            const forecastUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric&lang=fa`;
+            const weatherUrl = `${PROXY_URL}weather?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric&lang=fa`;
+            const forecastUrl = `${PROXY_URL}forecast?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric&lang=fa`;
             
-            console.log("در حال تلاش برای دریافت اطلاعات آب و هوا...");
-            
+            console.log("در حال تلاش برای دریافت اطلاعات آب و هوا از پروکسی...");
+
             const [weatherRes, forecastRes] = await Promise.all([
-                fetch(`${PROXY_URL}${encodeURIComponent(weatherUrl)}`),
-                fetch(`${PROXY_URL}${encodeURIComponent(forecastUrl)}`)
+                fetch(weatherUrl),
+                fetch(forecastUrl)
             ]);
 
             if (!weatherRes.ok || !forecastRes.ok) {
@@ -390,22 +387,18 @@
 
             const weatherData = await weatherRes.json();
             const forecastData = await forecastRes.json();
+            
+            console.log("اطلاعات آب و هوا با موفقیت دریافت شد:", weatherData);
 
-            // Allorigins.win returns a JSON object with a 'contents' field
-            const weatherContents = JSON.parse(weatherData.contents);
-            const forecastContents = JSON.parse(forecastData.contents);
-
-            console.log("اطلاعات آب و هوا با موفقیت دریافت شد:", weatherContents);
-
-            const iconCode = weatherContents.weather[0].icon;
-            const iconUrl = `http://openweathermap.org/img/wn/${iconCode}@2x.png`;
+            const iconCode = weatherData.weather[0].icon;
+            const iconUrl = `https://openweathermap.org/img/wn/${iconCode}@2x.png`;
 
             let forecastHtml = "<h3>پیش‌بینی ۵ روز آینده:</h3><ul class='forecast-list'>";
-            const dailyForecasts = forecastContents.list.filter(item => item.dt_txt.includes("12:00:00"));
+            const dailyForecasts = forecastData.list.filter(item => item.dt_txt.includes("12:00:00"));
             dailyForecasts.slice(0, 5).forEach(item => {
                 const dayName = new Date(item.dt * 1000).toLocaleDateString('fa-IR', { weekday: 'long' });
                 const forecastIconCode = item.weather[0].icon;
-                const forecastIconUrl = `http://openweathermap.org/img/wn/${forecastIconCode}.png`;
+                const forecastIconUrl = `https://openweathermap.org/img/wn/${forecastIconCode}.png`;
                 forecastHtml += `
                     <li>
                         <strong>${dayName}</strong>
@@ -419,12 +412,12 @@
             cityInfoBox.innerHTML = `
                 <h2>${selectedCity}</h2>
                 <div class="weather-main-info">
-                    <img src="${iconUrl}" alt="${weatherContents.weather[0].description}" class="weather-icon">
-                    <p><strong>دما:</strong> ${Math.round(weatherContents.main.temp)}°C</p>
-                    <p><strong>آب‌وهوا:</strong> ${weatherContents.weather[0].description}</p>
+                    <img src="${iconUrl}" alt="${weatherData.weather[0].description}" class="weather-icon">
+                    <p><strong>دما:</strong> ${Math.round(weatherData.main.temp)}°C</p>
+                    <p><strong>آب‌وهوا:</strong> ${weatherData.weather[0].description}</p>
                 </div>
-                <p><strong>حداقل دما:</strong> ${Math.round(weatherContents.main.temp_min)}°C | <strong>حداکثر دما:</strong> ${Math.round(weatherContents.main.temp_max)}°C</p>
-                <p><strong>رطوبت:</strong> ${weatherContents.main.humidity}% | <strong>سرعت باد:</strong> ${weatherContents.wind.speed} m/s</p>
+                <p><strong>حداقل دما:</strong> ${Math.round(weatherData.main.temp_min)}°C | <strong>حداکثر دما:</strong> ${Math.round(weatherData.main.temp_max)}°C</p>
+                <p><strong>رطوبت:</strong> ${weatherData.main.humidity}% | <strong>سرعت باد:</strong> ${weatherData.wind.speed} m/s</p>
                 ${forecastHtml}
             `;
         } catch (e) {
